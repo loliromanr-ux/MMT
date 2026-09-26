@@ -719,49 +719,178 @@
 
     </section>
 
+    <!-- PANTALLA PRINCIPAL DEL JUEGO -->
 
-    <!-- PANTALLA PRINCIPAL PROVISIONAL -->
+    <section id="pantallaPrincipal" class="panel-juego oculto">
 
-    <section id="pantallaPrincipal" class="panel oculto">
+      <div class="cabecera-juego">
 
-      <div class="logo-animales">
-        <span>🐦</span>
-        <span>🐜</span>
+        <div>
+          <h2>Juego de cierre financiero</h2>
+          <small>Sala MMT26</small>
+        </div>
+
+        <div id="estadoPartida" class="estado-partida">
+          Preparando la partida
+        </div>
+
       </div>
 
-      <h2>Pantalla principal</h2>
 
-      <p class="subtitulo">
-        La conexión funciona. En el próximo paso incorporaremos
-        el escenario del juego, los personajes y el panel de control.
-      </p>
+      <div class="zona-marcadores">
 
-      <div class="caja-espera">
-        <strong>Participantes conectados</strong>
+        <div class="marcador">
+          <span>Equipo pájaro</span>
 
-        <p>
-          Equipo pájaro:
-          <strong id="principalPajaro">0</strong>
-        </p>
+          <strong>
+            🐦 <span id="principalPajaro">0</span>
+          </strong>
+        </div>
 
-        <p>
-          Equipo hormiga:
-          <strong id="principalHormiga">0</strong>
-        </p>
+        <div class="marcador">
+          <span>Equipo hormiga</span>
+
+          <strong>
+            🐜 <span id="principalHormiga">0</span>
+          </strong>
+        </div>
+
+        <div class="marcador">
+          <span>Distancia actual</span>
+
+          <strong id="distanciaActual">
+            62 %
+          </strong>
+        </div>
+
       </div>
 
-      <button
-        id="botonVolverEntrada"
-        class="boton-secundario"
-        type="button"
-      >
-        Volver a la entrada
-      </button>
+
+      <div id="escenario" class="escenario">
+
+        <div class="sol"></div>
+
+        <div class="nube-decorativa">
+          ☁️
+        </div>
+
+        <div class="hierba">
+          ︿︿︿︿︿︿︿︿︿︿︿︿︿︿︿︿
+        </div>
+
+        <div class="linea-superficie"></div>
+
+
+        <div
+          id="personajePajaro"
+          class="personaje"
+        >
+          🐦
+        </div>
+
+        <div
+          id="etiquetaPajaro"
+          class="etiqueta-personaje"
+        >
+          INGRESOS
+        </div>
+
+
+        <div
+          id="personajeHormiga"
+          class="personaje"
+        >
+          🐜
+        </div>
+
+        <div
+          id="etiquetaHormiga"
+          class="etiqueta-personaje"
+        >
+          GASTOS
+        </div>
+
+
+        <div
+          id="lineaMargen"
+          class="linea-margen"
+        ></div>
+
+
+        <div
+          id="mensajeCentral"
+          class="mensaje-central"
+        >
+          <strong>
+            Partida preparada
+          </strong>
+
+          <span>
+            Cuando los equipos estén conectados,
+            pulsa “Iniciar partida”.
+          </span>
+        </div>
+
+      </div>
+
+
+      <div class="controles-juego">
+
+        <button
+          id="botonIniciar"
+          class="boton-control boton-iniciar"
+          type="button"
+        >
+          Iniciar partida
+        </button>
+
+        <button
+          id="botonPausar"
+          class="boton-control boton-pausar"
+          type="button"
+          disabled
+        >
+          Pausar
+        </button>
+
+        <button
+          id="botonReiniciar"
+          class="boton-control boton-reiniciar"
+          type="button"
+        >
+          Reiniciar
+        </button>
+
+        <button
+          id="botonVolverEntrada"
+          class="boton-control boton-salir"
+          type="button"
+        >
+          Volver
+        </button>
+
+      </div>
+
+
+      <div class="leyenda-juego">
+
+        <span>
+          🐦 Pájaro: ingresos
+        </span>
+
+        <span>
+          🐜 Hormiga: gastos
+        </span>
+
+        <span>
+          ↕️ Distancia: margen
+        </span>
+
+      </div>
 
     </section>
 
   </main>
-
 
   <script type="module">
 

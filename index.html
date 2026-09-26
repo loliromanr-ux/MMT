@@ -2,11 +2,28 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Juego de cierre financiero</title>
 
   <style>
+    :root {
+      --azul: #1769e0;
+      --azul-oscuro: #0d4fa8;
+      --cielo: #dff4ff;
+      --tierra: #eee1c7;
+      --pajaro: #e24545;
+      --hormiga: #654ea3;
+      --texto: #243447;
+      --blanco: #ffffff;
+      --verde: #249158;
+      --gris: #66788a;
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -14,126 +31,485 @@
     body {
       margin: 0;
       min-height: 100vh;
+      padding: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(180deg, #dff4ff 0%, #f4ead7 100%);
-      font-family: Arial, sans-serif;
-      color: #243447;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--texto);
+      background:
+        linear-gradient(
+          180deg,
+          var(--cielo) 0%,
+          var(--cielo) 52%,
+          var(--tierra) 52%,
+          var(--tierra) 100%
+        );
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .aplicacion {
+      width: min(100%, 760px);
     }
 
     .panel {
-      width: min(90%, 520px);
-      padding: 35px;
-      background: rgba(255, 255, 255, 0.94);
-      border-radius: 22px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      padding: 38px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 20px 55px rgba(36, 52, 71, 0.18);
       text-align: center;
     }
 
-    .animales {
-      margin-bottom: 15px;
-      font-size: 55px;
+    .oculto {
+      display: none !important;
+    }
+
+    .logo-animales {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 22px;
+      margin-bottom: 14px;
+      font-size: 58px;
     }
 
     h1 {
       margin: 0 0 12px;
-      font-size: 28px;
+      font-size: clamp(28px, 5vw, 42px);
     }
 
-    p {
-      line-height: 1.5;
+    h2 {
+      margin: 0 0 12px;
+      font-size: 29px;
     }
 
-    button {
-      width: 100%;
-      margin-top: 15px;
-      padding: 16px 20px;
-      border: 0;
+    .subtitulo {
+      max-width: 570px;
+      margin: 0 auto 28px;
+      font-size: 18px;
+      line-height: 1.55;
+      color: #536577;
+    }
+
+    .estado-conexion {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      background: #eef3f8;
+      color: #536577;
+      font-size: 14px;
+    }
+
+    .punto {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #e4a11b;
+    }
+
+    .estado-conexion.conectado .punto {
+      background: var(--verde);
+    }
+
+    .estado-conexion.error .punto {
+      background: #c73939;
+    }
+
+    .equipos {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .tarjeta-equipo {
+      position: relative;
+      padding: 25px 18px;
+      border: 3px solid transparent;
+      border-radius: 22px;
+      background: #f6f8fb;
+      cursor: pointer;
+      transition:
+        transform 0.18s,
+        box-shadow 0.18s,
+        border-color 0.18s;
+    }
+
+    .tarjeta-equipo:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 13px 27px rgba(36, 52, 71, 0.13);
+    }
+
+    .tarjeta-equipo:disabled {
+      opacity: 0.65;
+      cursor: wait;
+      transform: none;
+    }
+
+    .tarjeta-equipo.pajaro {
+      border-color: rgba(226, 69, 69, 0.25);
+      background: #fff1f1;
+    }
+
+    .tarjeta-equipo.pajaro:hover {
+      border-color: var(--pajaro);
+    }
+
+    .tarjeta-equipo.hormiga {
+      border-color: rgba(101, 78, 163, 0.25);
+      background: #f3efff;
+    }
+
+    .tarjeta-equipo.hormiga:hover {
+      border-color: var(--hormiga);
+    }
+
+    .icono-equipo {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 58px;
+    }
+
+    .nombre-equipo {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--texto);
+    }
+
+    .accion-equipo {
+      display: block;
+      margin-bottom: 15px;
+      font-size: 15px;
+      color: var(--gris);
+    }
+
+    .contador {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--blanco);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .mensaje-error {
+      margin: 18px 0;
+      padding: 14px;
       border-radius: 12px;
-      background: #1769e0;
-      color: white;
-      font-size: 17px;
-      font-weight: bold;
+      background: #ffe8e8;
+      color: #962525;
+      line-height: 1.4;
+    }
+
+    .acceso-control {
+      border: none;
+      background: transparent;
+      color: #647587;
+      text-decoration: underline;
       cursor: pointer;
     }
 
-    button:hover {
-      background: #0d55ba;
+    .acceso-control:hover {
+      color: var(--azul);
     }
 
-    button:disabled {
-      background: #9aa7b5;
-      cursor: wait;
+    .animal-grande {
+      margin-bottom: 12px;
+      font-size: 88px;
     }
 
-    #estado {
-      min-height: 55px;
-      margin-top: 22px;
-      padding: 15px;
-      border-radius: 12px;
+    .insignia-equipo {
+      display: inline-block;
+      margin: 8px 0 24px;
+      padding: 9px 16px;
+      border-radius: 999px;
+      color: white;
+      font-weight: 700;
+    }
+
+    .insignia-equipo.pajaro {
+      background: var(--pajaro);
+    }
+
+    .insignia-equipo.hormiga {
+      background: var(--hormiga);
+    }
+
+    .caja-espera {
+      margin: 22px auto;
+      padding: 22px;
+      border-radius: 18px;
       background: #eef3f8;
-      overflow-wrap: anywhere;
     }
 
-    .correcto {
-      background: #e3f8ea !important;
-      color: #176b36;
+    .pulso {
+      width: 16px;
+      height: 16px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      background: var(--verde);
+      animation: pulsar 1.4s infinite;
     }
 
-    .error {
-      background: #ffe8e8 !important;
-      color: #9a2525;
+    @keyframes pulsar {
+      0% {
+        box-shadow: 0 0 0 0 rgba(36, 145, 88, 0.5);
+      }
+
+      70% {
+        box-shadow: 0 0 0 14px rgba(36, 145, 88, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(36, 145, 88, 0);
+      }
+    }
+
+    .boton-secundario {
+      margin-top: 14px;
+      padding: 12px 18px;
+      border: 2px solid #b8c4d0;
+      border-radius: 11px;
+      background: var(--blanco);
+      color: var(--texto);
+      cursor: pointer;
+    }
+
+    .boton-secundario:hover {
+      border-color: var(--azul);
+      color: var(--azul);
+    }
+
+    .nota {
+      margin-top: 18px;
+      font-size: 14px;
+      line-height: 1.45;
+      color: #66788a;
+    }
+
+    @media (max-width: 620px) {
+      body {
+        padding: 14px;
+      }
+
+      .panel {
+        padding: 27px 20px;
+      }
+
+      .equipos {
+        grid-template-columns: 1fr;
+      }
+
+      .logo-animales {
+        font-size: 48px;
+      }
+
+      .tarjeta-equipo {
+        padding: 20px 15px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <main class="panel">
-    <div class="animales">🐦 🐜</div>
+  <main class="aplicacion">
 
-    <h1>Juego de cierre financiero</h1>
+    <!-- PANTALLA DE ENTRADA -->
 
-    <p>
-      Esta pantalla comprobará la conexión entre GitHub Pages
-      y Firebase.
-    </p>
+    <section id="pantallaEntrada" class="panel">
 
-    <button id="botonPrueba">
-      Probar conexión
-    </button>
+      <div class="logo-animales">
+        <span>🐦</span>
+        <span>🐜</span>
+      </div>
 
-    <div id="estado">
-      Pendiente de realizar la prueba.
-    </div>
+      <h1>Juego de cierre financiero</h1>
+
+      <p class="subtitulo">
+        Elige el equipo que te han asignado.
+        Cuando todo el equipo esté preparado, comenzará la partida.
+      </p>
+
+      <div id="estadoConexion" class="estado-conexion">
+        <span class="punto"></span>
+        <span id="textoConexion">Conectando con la partida...</span>
+      </div>
+
+      <div class="equipos">
+
+        <button
+          id="botonPajaro"
+          class="tarjeta-equipo pajaro"
+          type="button"
+        >
+          <span class="icono-equipo">🐦</span>
+          <span class="nombre-equipo">Equipo pájaro</span>
+          <span class="accion-equipo">
+            Mantén al pájaro en vuelo
+          </span>
+          <span id="contadorPajaro" class="contador">
+            0 participantes
+          </span>
+        </button>
+
+        <button
+          id="botonHormiga"
+          class="tarjeta-equipo hormiga"
+          type="button"
+        >
+          <span class="icono-equipo">🐜</span>
+          <span class="nombre-equipo">Equipo hormiga</span>
+          <span class="accion-equipo">
+            Ayuda a la hormiga a excavar
+          </span>
+          <span id="contadorHormiga" class="contador">
+            0 participantes
+          </span>
+        </button>
+
+      </div>
+
+      <div id="mensajeError" class="mensaje-error oculto"></div>
+
+      <button
+        id="botonPantallaPrincipal"
+        class="acceso-control"
+        type="button"
+      >
+        Abrir pantalla principal
+      </button>
+
+      <p class="nota">
+        No necesitas registrarte ni introducir datos personales.
+      </p>
+
+    </section>
+
+
+    <!-- PANTALLA DE ESPERA -->
+
+    <section id="pantallaEspera" class="panel oculto">
+
+      <div id="animalSeleccionado" class="animal-grande">
+        🐦
+      </div>
+
+      <h2>¡Ya estás dentro!</h2>
+
+      <div
+        id="insigniaSeleccionada"
+        class="insignia-equipo pajaro"
+      >
+        Equipo pájaro
+      </div>
+
+      <div class="caja-espera">
+        <div class="pulso"></div>
+
+        <strong>Esperando el inicio de la partida</strong>
+
+        <p>
+          Mantén esta pantalla abierta.
+          Las operaciones aparecerán automáticamente cuando comience el juego.
+        </p>
+      </div>
+
+      <p id="mensajeParticipantes">
+        Conectando con el resto del equipo...
+      </p>
+
+      <button
+        id="botonCambiarEquipo"
+        class="boton-secundario"
+        type="button"
+      >
+        Cambiar de equipo
+      </button>
+
+    </section>
+
+
+    <!-- PANTALLA PRINCIPAL PROVISIONAL -->
+
+    <section id="pantallaPrincipal" class="panel oculto">
+
+      <div class="logo-animales">
+        <span>🐦</span>
+        <span>🐜</span>
+      </div>
+
+      <h2>Pantalla principal</h2>
+
+      <p class="subtitulo">
+        La conexión funciona. En el próximo paso incorporaremos
+        el escenario del juego, los personajes y el panel de control.
+      </p>
+
+      <div class="caja-espera">
+        <strong>Participantes conectados</strong>
+
+        <p>
+          Equipo pájaro:
+          <strong id="principalPajaro">0</strong>
+        </p>
+
+        <p>
+          Equipo hormiga:
+          <strong id="principalHormiga">0</strong>
+        </p>
+      </div>
+
+      <button
+        id="botonVolverEntrada"
+        class="boton-secundario"
+        type="button"
+      >
+        Volver a la entrada
+      </button>
+
+    </section>
+
   </main>
+
 
   <script type="module">
 
-    import { initializeApp }
-      from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
 
     import {
       getAuth,
-      signInAnonymously
+      signInAnonymously,
+      onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 
     import {
       getDatabase,
       ref,
       set,
+      remove,
+      onValue,
+      onDisconnect,
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
 
 
     /*
-      IMPORTANTE:
-      Sustituye el contenido de este objeto
-      por TU configuración de Firebase.
+      PEGA AQUÍ TU CONFIGURACIÓN REAL DE FIREBASE.
+      Sustituye todo este bloque por el que has guardado.
     */
 
-    const firebaseConfig = {
+ const firebaseConfig = {
     apiKey: "AIzaSyCI3tsLh_mWqQ1E2Xa5YEaddjF-N6LFUEU",
     authDomain: "mmt26-f7d6f.firebaseapp.com",
     databaseURL: "https://mmt26-f7d6f-default-rtdb.europe-west1.firebasedatabase.app",
@@ -145,58 +521,364 @@
     };
 
 
+    const CODIGO_SALA = "MMT26";
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const database = getDatabase(app);
 
-    const botonPrueba = document.getElementById("botonPrueba");
-    const estado = document.getElementById("estado");
+
+    const pantallaEntrada =
+      document.getElementById("pantallaEntrada");
+
+    const pantallaEspera =
+      document.getElementById("pantallaEspera");
+
+    const pantallaPrincipal =
+      document.getElementById("pantallaPrincipal");
+
+    const estadoConexion =
+      document.getElementById("estadoConexion");
+
+    const textoConexion =
+      document.getElementById("textoConexion");
+
+    const contadorPajaro =
+      document.getElementById("contadorPajaro");
+
+    const contadorHormiga =
+      document.getElementById("contadorHormiga");
+
+    const principalPajaro =
+      document.getElementById("principalPajaro");
+
+    const principalHormiga =
+      document.getElementById("principalHormiga");
+
+    const botonPajaro =
+      document.getElementById("botonPajaro");
+
+    const botonHormiga =
+      document.getElementById("botonHormiga");
+
+    const botonCambiarEquipo =
+      document.getElementById("botonCambiarEquipo");
+
+    const botonPantallaPrincipal =
+      document.getElementById("botonPantallaPrincipal");
+
+    const botonVolverEntrada =
+      document.getElementById("botonVolverEntrada");
+
+    const animalSeleccionado =
+      document.getElementById("animalSeleccionado");
+
+    const insigniaSeleccionada =
+      document.getElementById("insigniaSeleccionada");
+
+    const mensajeParticipantes =
+      document.getElementById("mensajeParticipantes");
+
+    const mensajeError =
+      document.getElementById("mensajeError");
 
 
-    botonPrueba.addEventListener("click", async () => {
+    let usuarioActual = null;
+    let equipoActual = null;
 
-      botonPrueba.disabled = true;
-      estado.className = "";
-      estado.textContent = "Conectando con Firebase...";
+    let cantidadPajaros = 0;
+    let cantidadHormigas = 0;
 
-      try {
 
-        const credencial = await signInAnonymously(auth);
-        const usuario = credencial.user;
+    function mostrarPantalla(nombre) {
 
-        estado.textContent =
-          "Usuario anónimo conectado. Enviando prueba...";
+      pantallaEntrada.classList.add("oculto");
+      pantallaEspera.classList.add("oculto");
+      pantallaPrincipal.classList.add("oculto");
 
-        await set(
-          ref(database, "pruebas/" + usuario.uid),
-          {
-            mensaje: "Conexión correcta desde GitHub Pages",
-            usuario: usuario.uid,
-            fecha: serverTimestamp()
+      if (nombre === "entrada") {
+        pantallaEntrada.classList.remove("oculto");
+      }
+
+      if (nombre === "espera") {
+        pantallaEspera.classList.remove("oculto");
+      }
+
+      if (nombre === "principal") {
+        pantallaPrincipal.classList.remove("oculto");
+      }
+
+    }
+
+
+    function mostrarError(error) {
+
+      console.error(error);
+
+      mensajeError.textContent =
+        "No se ha podido completar la conexión: " +
+        (error.code || error.message || error);
+
+      mensajeError.classList.remove("oculto");
+
+      estadoConexion.className = "estado-conexion error";
+      textoConexion.textContent = "Error de conexión";
+
+    }
+
+
+    function actualizarContadores(datos) {
+
+      cantidadPajaros = 0;
+      cantidadHormigas = 0;
+
+      if (datos) {
+
+        Object.values(datos).forEach((participante) => {
+
+          if (participante.equipo === "pajaro") {
+            cantidadPajaros += 1;
           }
-        );
 
-        estado.className = "correcto";
-        estado.textContent =
-          "¡Conexión correcta! La web ha enviado una señal a Firebase.";
+          if (participante.equipo === "hormiga") {
+            cantidadHormigas += 1;
+          }
 
-      } catch (error) {
-
-        console.error(error);
-
-        estado.className = "error";
-        estado.textContent =
-          "No se ha podido conectar: " +
-          error.code +
-          " - " +
-          error.message;
-
-      } finally {
-
-        botonPrueba.disabled = false;
+        });
 
       }
 
+      contadorPajaro.textContent =
+        cantidadPajaros === 1
+          ? "1 participante"
+          : cantidadPajaros + " participantes";
+
+      contadorHormiga.textContent =
+        cantidadHormigas === 1
+          ? "1 participante"
+          : cantidadHormigas + " participantes";
+
+      principalPajaro.textContent = cantidadPajaros;
+      principalHormiga.textContent = cantidadHormigas;
+
+      if (equipoActual === "pajaro") {
+
+        mensajeParticipantes.textContent =
+          "Hay " +
+          cantidadPajaros +
+          " participantes conectados en el equipo pájaro.";
+
+      }
+
+      if (equipoActual === "hormiga") {
+
+        mensajeParticipantes.textContent =
+          "Hay " +
+          cantidadHormigas +
+          " participantes conectados en el equipo hormiga.";
+
+      }
+
+    }
+
+
+    async function elegirEquipo(equipo) {
+
+      if (!usuarioActual) {
+        return;
+      }
+
+      try {
+
+        botonPajaro.disabled = true;
+        botonHormiga.disabled = true;
+        mensajeError.classList.add("oculto");
+
+        equipoActual = equipo;
+
+        const participanteRef = ref(
+          database,
+          "salas/" +
+          CODIGO_SALA +
+          "/participantes/" +
+          usuarioActual.uid
+        );
+
+        await set(participanteRef, {
+          equipo: equipo,
+          conectado: true,
+          entrada: serverTimestamp()
+        });
+
+        onDisconnect(participanteRef).remove();
+
+        localStorage.setItem("equipoMMT26", equipo);
+
+        if (equipo === "pajaro") {
+
+          animalSeleccionado.textContent = "🐦";
+          insigniaSeleccionada.textContent = "Equipo pájaro";
+          insigniaSeleccionada.className =
+            "insignia-equipo pajaro";
+
+        } else {
+
+          animalSeleccionado.textContent = "🐜";
+          insigniaSeleccionada.textContent = "Equipo hormiga";
+          insigniaSeleccionada.className =
+            "insignia-equipo hormiga";
+
+        }
+
+        mostrarPantalla("espera");
+        actualizarContadoresDesdeEstado();
+
+      } catch (error) {
+
+        mostrarError(error);
+
+      } finally {
+
+        botonPajaro.disabled = false;
+        botonHormiga.disabled = false;
+
+      }
+
+    }
+
+
+    function actualizarContadoresDesdeEstado() {
+
+      if (equipoActual === "pajaro") {
+
+        mensajeParticipantes.textContent =
+          "Hay " +
+          cantidadPajaros +
+          " participantes conectados en el equipo pájaro.";
+
+      }
+
+      if (equipoActual === "hormiga") {
+
+        mensajeParticipantes.textContent =
+          "Hay " +
+          cantidadHormigas +
+          " participantes conectados en el equipo hormiga.";
+
+      }
+
+    }
+
+
+    async function cambiarEquipo() {
+
+      if (!usuarioActual) {
+        return;
+      }
+
+      try {
+
+        const participanteRef = ref(
+          database,
+          "salas/" +
+          CODIGO_SALA +
+          "/participantes/" +
+          usuarioActual.uid
+        );
+
+        await remove(participanteRef);
+
+        localStorage.removeItem("equipoMMT26");
+        equipoActual = null;
+
+        mostrarPantalla("entrada");
+
+      } catch (error) {
+
+        mostrarError(error);
+
+      }
+
+    }
+
+
+    function escucharParticipantes() {
+
+      const participantesRef = ref(
+        database,
+        "salas/" + CODIGO_SALA + "/participantes"
+      );
+
+      onValue(
+        participantesRef,
+        (snapshot) => {
+          actualizarContadores(snapshot.val());
+        },
+        (error) => {
+          mostrarError(error);
+        }
+      );
+
+    }
+
+
+    botonPajaro.addEventListener(
+      "click",
+      () => elegirEquipo("pajaro")
+    );
+
+    botonHormiga.addEventListener(
+      "click",
+      () => elegirEquipo("hormiga")
+    );
+
+    botonCambiarEquipo.addEventListener(
+      "click",
+      cambiarEquipo
+    );
+
+    botonPantallaPrincipal.addEventListener(
+      "click",
+      () => mostrarPantalla("principal")
+    );
+
+    botonVolverEntrada.addEventListener(
+      "click",
+      () => mostrarPantalla("entrada")
+    );
+
+
+    onAuthStateChanged(auth, async (usuario) => {
+
+      if (usuario) {
+
+        usuarioActual = usuario;
+
+        estadoConexion.className =
+          "estado-conexion conectado";
+
+        textoConexion.textContent =
+          "Conectado con la partida";
+
+        escucharParticipantes();
+
+        const equipoGuardado =
+          localStorage.getItem("equipoMMT26");
+
+        if (
+          equipoGuardado === "pajaro" ||
+          equipoGuardado === "hormiga"
+        ) {
+          await elegirEquipo(equipoGuardado);
+        }
+
+      }
+
+    });
+
+
+    signInAnonymously(auth).catch((error) => {
+      mostrarError(error);
     });
 
   </script>

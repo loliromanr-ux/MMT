@@ -904,15 +904,16 @@
       onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 
-    import {
-      getDatabase,
-      ref,
-      set,
-      remove,
-      onValue,
-      onDisconnect,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
+import {
+  getDatabase,
+  ref,
+  set,
+  update,
+  remove,
+  onValue,
+  onDisconnect,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
 
 
     /*
@@ -993,14 +994,508 @@
     const mensajeError =
       document.getElementById("mensajeError");
 
+    const mensajeParticipantes =
+  document.getElementById("mensajeParticipantes");
+
+const mensajeError =
+  document.getElementById("mensajeError");
+
+const estadoPartida =
+  document.getElementById("estadoPartida");
+
+const distanciaActual =
+  document.getElementById("distanciaActual");
+
+const personajePajaro =
+  document.getElementById("personajePajaro");
+
+const personajeHormiga =
+  document.getElementById("personajeHormiga");
+
+const etiquetaPajaro =
+  document.getElementById("etiquetaPajaro");
+
+const etiquetaHormiga =
+  document.getElementById("etiquetaHormiga");
+
+const lineaMargen =
+  document.getElementById("lineaMargen");
+
+const mensajeCentral =
+  document.getElementById("mensajeCentral");
+
+const botonIniciar =
+  document.getElementById("botonIniciar");
+
+const botonPausar =
+  document.getElementById("botonPausar");
+
+const botonReiniciar =
+  document.getElementById("botonReiniciar");
+
+
+let usuarioActual = null;
+let equipoActual = null;
+
+let cantidadPajaros = 0;
+let cantidadHormigas = 0;
 
     let usuarioActual = null;
     let equipoActual = null;
 
     let cantidadPajaros = 0;
     let cantidadHormigas = 0;
+let esPantallaPrincipal = false;
+let intervaloJuego = null;
+
+let estadoJuego = {
+  estado: "preparada",
+  pajaro: 20,
+  hormiga: 82,
+  duracion: 360,
+  tiempoRestante: 360
+};
+
+    function calcularDistancia() {
+
+  const posicionPajaro =
+    Number(estadoJuego.pajaro ?? 20);
+
+  const posicionHormiga =
+    Number(estadoJuego.hormiga ?? 82);
+
+  return Math.max(
+    0,
+    posicionHormiga - posicionPajaro
+  );
+
+}
 
 
+function formatearTiempo(segundos) {
+
+  const minutos =
+    Math.floor(segundos / 60);
+
+  const segundosRestantes =
+    segundos % 60;
+
+  return (
+    String(minutos).padStart(2, "0") +
+    ":" +
+    String(segundosRestantes).padStart(2, "0")
+  );
+
+}
+
+
+function dibujarJuego() {
+
+  const posicionPajaro =
+    Number(estadoJuego.pajaro ?? 20);
+
+  const posicionHormiga =
+    Number(estadoJuego.hormiga ?? 82);
+
+  const distancia =
+    calcularDistancia();
+
+  personajePajaro.style.top =
+    posicionPajaro + "%";
+
+  personajeHormiga.style.top =
+    posicionHormiga + "%";
+
+  etiquetaPajaro.style.top =
+    Math.min(posicionPajaro + 9, 47) + "%";
+
+  etiquetaHormiga.style.top =
+    Math.min(posicionHormiga + 9, 96) + "%";
+
+  lineaMargen.style.top =
+    posicionPajaro + "%";
+
+  lineaMargen.style.height =
+    distancia + "%";
+
+  distanciaActual.textContent =
+    distancia.toFixed(1) + " %";
+
+  lineaMargen.className =
+    "linea-margen";
+
+  if (
+    distancia <= 25 &&
+    distancia > 12
+  ) {
+    lineaMargen.classList.add("riesgo");
+  }
+
+  if (distancia <= 12) {
+    lineaMargen.classList.add("critico");
+  }
+
+  actualizarEstadoVisual(distancia);
+
+}
+
+
+function actualizarEstadoVisual(distancia) {
+
+  const estado =
+    estadoJuego.estado || "preparada";
+
+  const tiempo =
+    Number(estadoJuego.tiempoRestante ?? 360);
+
+  estadoPartida.className =
+    "estado-partida";
+
+  if (estado === "preparada") {
+
+    estadoPartida.textContent =
+      "Preparando la partida";
+
+    mensajeCentral.classList.remove("oculto");
+
+    mensajeCentral.innerHTML =
+      "<strong>Partida preparada</strong>" +
+      "<span>Cuando los equipos estén conectados, " +
+      "pulsa “Iniciar partida”.</span>";
+
+    botonIniciar.disabled = false;
+    botonPausar.disabled = true;
+    botonPausar.textContent = "Pausar";
+
+  }
+
+  if (estado === "jugando") {
+
+    estadoPartida.classList.add("jugando");
+
+    estadoPartida.textContent =
+      "Partida en curso · " +
+      formatearTiempo(tiempo);
+
+    mensajeCentral.classList.add("oculto");
+
+    botonIniciar.disabled = true;
+    botonPausar.disabled = false;
+    botonPausar.textContent = "Pausar";
+
+  }
+
+  if (estado === "pausada") {
+
+    estadoPartida.classList.add("pausada");
+
+    estadoPartida.textContent =
+      "Partida pausada · " +
+      formatearTiempo(tiempo);
+
+    mensajeCentral.classList.remove("oculto");
+
+    mensajeCentral.innerHTML =
+      "<strong>Partida pausada</strong>" +
+      "<span>La partida continuará cuando pulses " +
+      "“Reanudar”.</span>";
+
+    botonIniciar.disabled = true;
+    botonPausar.disabled = false;
+    botonPausar.textContent = "Reanudar";
+
+  }
+
+  if (estado === "finalizada") {
+
+    estadoPartida.classList.add("finalizada");
+    estadoPartida.textContent =
+      "Partida finalizada";
+
+    mensajeCentral.classList.remove("oculto");
+
+    botonIniciar.disabled = true;
+    botonPausar.disabled = true;
+
+    if (distancia <= 0) {
+
+      mensajeCentral.innerHTML =
+        "<strong>¡Colisión!</strong>" +
+        "<span>El pájaro y la hormiga han alcanzado " +
+        "el mismo nivel.</span>";
+
+    } else {
+
+      mensajeCentral.innerHTML =
+        "<strong>Fin de la partida</strong>" +
+        "<span>Distancia final: " +
+        distancia.toFixed(1) +
+        " %.</span>";
+
+    }
+
+  }
+
+}
+
+
+function detenerIntervaloJuego() {
+
+  if (intervaloJuego !== null) {
+
+    clearInterval(intervaloJuego);
+    intervaloJuego = null;
+
+  }
+
+}
+
+
+function iniciarRelojJuego() {
+
+  detenerIntervaloJuego();
+
+  if (!esPantallaPrincipal) {
+    return;
+  }
+
+  intervaloJuego = setInterval(
+    actualizarMovimiento,
+    1000
+  );
+
+}
+
+
+async function actualizarMovimiento() {
+
+  if (
+    estadoJuego.estado !== "jugando" ||
+    !esPantallaPrincipal
+  ) {
+    return;
+  }
+
+  const gravedadPajaro = 0.12;
+  const subidaHormiga = 0.08;
+
+  const nuevaPosicionPajaro =
+    Math.min(
+      Number(estadoJuego.pajaro) +
+      gravedadPajaro,
+      95
+    );
+
+  const nuevaPosicionHormiga =
+    Math.max(
+      Number(estadoJuego.hormiga) -
+      subidaHormiga,
+      5
+    );
+
+  const nuevoTiempo =
+    Math.max(
+      Number(estadoJuego.tiempoRestante) - 1,
+      0
+    );
+
+  const nuevaDistancia =
+    nuevaPosicionHormiga -
+    nuevaPosicionPajaro;
+
+  const partidaTerminada =
+    nuevaDistancia <= 0 ||
+    nuevoTiempo <= 0;
+
+  try {
+
+    await update(
+      ref(
+        database,
+        "salas/" +
+        CODIGO_SALA +
+        "/juego"
+      ),
+      {
+        pajaro: nuevaPosicionPajaro,
+        hormiga: nuevaPosicionHormiga,
+        tiempoRestante: nuevoTiempo,
+        estado: partidaTerminada
+          ? "finalizada"
+          : "jugando",
+        ultimaActualizacion: serverTimestamp()
+      }
+    );
+
+    if (partidaTerminada) {
+      detenerIntervaloJuego();
+    }
+
+  } catch (error) {
+
+    detenerIntervaloJuego();
+    mostrarError(error);
+
+  }
+
+}
+
+
+async function iniciarPartida() {
+
+  esPantallaPrincipal = true;
+  detenerIntervaloJuego();
+
+  try {
+
+    await set(
+      ref(
+        database,
+        "salas/" +
+        CODIGO_SALA +
+        "/juego"
+      ),
+      {
+        estado: "jugando",
+        pajaro: 20,
+        hormiga: 82,
+        duracion: 360,
+        tiempoRestante: 360,
+        inicio: serverTimestamp(),
+        ultimaActualizacion: serverTimestamp()
+      }
+    );
+
+    iniciarRelojJuego();
+
+  } catch (error) {
+
+    mostrarError(error);
+
+  }
+
+}
+
+
+async function pausarOReanudarPartida() {
+
+  if (
+    estadoJuego.estado !== "jugando" &&
+    estadoJuego.estado !== "pausada"
+  ) {
+    return;
+  }
+
+  const nuevoEstado =
+    estadoJuego.estado === "jugando"
+      ? "pausada"
+      : "jugando";
+
+  try {
+
+    await update(
+      ref(
+        database,
+        "salas/" +
+        CODIGO_SALA +
+        "/juego"
+      ),
+      {
+        estado: nuevoEstado,
+        ultimaActualizacion: serverTimestamp()
+      }
+    );
+
+    if (nuevoEstado === "jugando") {
+
+      iniciarRelojJuego();
+
+    } else {
+
+      detenerIntervaloJuego();
+
+    }
+
+  } catch (error) {
+
+    mostrarError(error);
+
+  }
+
+}
+
+
+async function reiniciarPartida() {
+
+  detenerIntervaloJuego();
+
+  try {
+
+    await set(
+      ref(
+        database,
+        "salas/" +
+        CODIGO_SALA +
+        "/juego"
+      ),
+      {
+        estado: "preparada",
+        pajaro: 20,
+        hormiga: 82,
+        duracion: 360,
+        tiempoRestante: 360,
+        reinicio: serverTimestamp(),
+        ultimaActualizacion: serverTimestamp()
+      }
+    );
+
+  } catch (error) {
+
+    mostrarError(error);
+
+  }
+
+}
+
+
+function escucharEstadoJuego() {
+
+  const juegoRef = ref(
+    database,
+    "salas/" +
+    CODIGO_SALA +
+    "/juego"
+  );
+
+  onValue(
+    juegoRef,
+    (snapshot) => {
+
+      if (snapshot.exists()) {
+
+        estadoJuego = {
+          ...estadoJuego,
+          ...snapshot.val()
+        };
+
+      }
+
+      dibujarJuego();
+
+      if (
+        estadoJuego.estado === "finalizada"
+      ) {
+        detenerIntervaloJuego();
+      }
+
+    },
+    (error) => {
+      mostrarError(error);
+    }
+  );
+
+}
+    
     function mostrarPantalla(nombre) {
 
       pantallaEntrada.classList.add("oculto");
@@ -1248,16 +1743,42 @@
       cambiarEquipo
     );
 
-    botonPantallaPrincipal.addEventListener(
-      "click",
-      () => mostrarPantalla("principal")
-    );
+botonPantallaPrincipal.addEventListener(
+  "click",
+  () => {
 
-    botonVolverEntrada.addEventListener(
-      "click",
-      () => mostrarPantalla("entrada")
-    );
+    esPantallaPrincipal = true;
+    mostrarPantalla("principal");
+    dibujarJuego();
 
+  }
+);
+
+botonVolverEntrada.addEventListener(
+  "click",
+  () => {
+
+    esPantallaPrincipal = false;
+    detenerIntervaloJuego();
+    mostrarPantalla("entrada");
+
+  }
+);
+
+    botonIniciar.addEventListener(
+  "click",
+  iniciarPartida
+);
+
+botonPausar.addEventListener(
+  "click",
+  pausarOReanudarPartida
+);
+
+botonReiniciar.addEventListener(
+  "click",
+  reiniciarPartida
+);
 
     onAuthStateChanged(auth, async (usuario) => {
 
@@ -1272,6 +1793,7 @@
           "Conectado con la partida";
 
         escucharParticipantes();
+        escucharEstadoJuego();
 
         const equipoGuardado =
           localStorage.getItem("equipoMMT26");

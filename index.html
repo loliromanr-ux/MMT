@@ -1,12 +1,204 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Juego de cierre financiero</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Juego de cierre financiero</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, #dff4ff 0%, #f4ead7 100%);
+      font-family: Arial, sans-serif;
+      color: #243447;
+    }
+
+    .panel {
+      width: min(90%, 520px);
+      padding: 35px;
+      background: rgba(255, 255, 255, 0.94);
+      border-radius: 22px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      text-align: center;
+    }
+
+    .animales {
+      margin-bottom: 15px;
+      font-size: 55px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 28px;
+    }
+
+    p {
+      line-height: 1.5;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 15px;
+      padding: 16px 20px;
+      border: 0;
+      border-radius: 12px;
+      background: #1769e0;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0d55ba;
+    }
+
+    button:disabled {
+      background: #9aa7b5;
+      cursor: wait;
+    }
+
+    #estado {
+      min-height: 55px;
+      margin-top: 22px;
+      padding: 15px;
+      border-radius: 12px;
+      background: #eef3f8;
+      overflow-wrap: anywhere;
+    }
+
+    .correcto {
+      background: #e3f8ea !important;
+      color: #176b36;
+    }
+
+    .error {
+      background: #ffe8e8 !important;
+      color: #9a2525;
+    }
+  </style>
 </head>
+
 <body>
-<h1>Juego de cierre financiero</h1>
-<p>La web se ha publicado correctamente.</p>
+
+  <main class="panel">
+    <div class="animales">🐦 🐜</div>
+
+    <h1>Juego de cierre financiero</h1>
+
+    <p>
+      Esta pantalla comprobará la conexión entre GitHub Pages
+      y Firebase.
+    </p>
+
+    <button id="botonPrueba">
+      Probar conexión
+    </button>
+
+    <div id="estado">
+      Pendiente de realizar la prueba.
+    </div>
+  </main>
+
+  <script type="module">
+
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+
+    import {
+      getAuth,
+      signInAnonymously
+    } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+    import {
+      getDatabase,
+      ref,
+      set,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
+
+
+    /*
+      IMPORTANTE:
+      Sustituye el contenido de este objeto
+      por TU configuración de Firebase.
+    */
+
+    const firebaseConfig = {
+      apiKey: "PEGA_AQUI_TU_API_KEY",
+      authDomain: "PEGA_AQUI_TU_AUTH_DOMAIN",
+      databaseURL: "PEGA_AQUI_TU_DATABASE_URL",
+      projectId: "PEGA_AQUI_TU_PROJECT_ID",
+      storageBucket: "PEGA_AQUI_TU_STORAGE_BUCKET",
+      messagingSenderId: "PEGA_AQUI_TU_MESSAGING_SENDER_ID",
+      appId: "PEGA_AQUI_TU_APP_ID"
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const database = getDatabase(app);
+
+    const botonPrueba = document.getElementById("botonPrueba");
+    const estado = document.getElementById("estado");
+
+
+    botonPrueba.addEventListener("click", async () => {
+
+      botonPrueba.disabled = true;
+      estado.className = "";
+      estado.textContent = "Conectando con Firebase...";
+
+      try {
+
+        const credencial = await signInAnonymously(auth);
+        const usuario = credencial.user;
+
+        estado.textContent =
+          "Usuario anónimo conectado. Enviando prueba...";
+
+        await set(
+          ref(database, "pruebas/" + usuario.uid),
+          {
+            mensaje: "Conexión correcta desde GitHub Pages",
+            usuario: usuario.uid,
+            fecha: serverTimestamp()
+          }
+        );
+
+        estado.className = "correcto";
+        estado.textContent =
+          "¡Conexión correcta! La web ha enviado una señal a Firebase.";
+
+      } catch (error) {
+
+        console.error(error);
+
+        estado.className = "error";
+        estado.textContent =
+          "No se ha podido conectar: " +
+          error.code +
+          " - " +
+          error.message;
+
+      } finally {
+
+        botonPrueba.disabled = false;
+
+      }
+
+    });
+
+  </script>
+
 </body>
 </html>

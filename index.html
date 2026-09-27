@@ -1704,6 +1704,9 @@ function actualizarPantallaOperacion() {
 
     contenidoEsperaOperacion.classList.add("oculto");
     contenidoPregunta.classList.remove("oculto");
+    if (!preguntaActual) {
+  generarPregunta();
+}
 
   } else {
 
@@ -1711,6 +1714,10 @@ function actualizarPantallaOperacion() {
 
     contenidoPregunta.classList.add("oculto");
     contenidoEsperaOperacion.classList.remove("oculto");
+    if (estadoJuego.estado === "finalizada") {
+  preguntaActual = null;
+  respuestaBloqueada = false;
+}
 
     if (estadoJuego.estado === "pausada") {
 
@@ -2344,7 +2351,14 @@ function mostrarPantalla(nombre) {
     botonSalirOperacion.addEventListener(
   "click",
   async () => {
-
+preguntaActual = null;
+respuestaBloqueada = false;
+aciertosPersonales = 0;
+intentosPersonales = 0;
+ 
+contadorAciertos.textContent = "0";
+contadorIntentos.textContent = "0";
+    
     await cambiarEquipo();
 
   }

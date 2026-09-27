@@ -1413,6 +1413,42 @@ const botonPausar =
 const botonReiniciar =
   document.getElementById("botonReiniciar");
 
+    const pantallaOperacion =
+  document.getElementById("pantallaOperacion");
+
+const iconoOperacion =
+  document.getElementById("iconoOperacion");
+
+const nombreEquipoOperacion =
+  document.getElementById("nombreEquipoOperacion");
+
+const estadoOperacion =
+  document.getElementById("estadoOperacion");
+
+const contenidoPregunta =
+  document.getElementById("contenidoPregunta");
+
+const contenidoEsperaOperacion =
+  document.getElementById("contenidoEsperaOperacion");
+
+const textoPregunta =
+  document.getElementById("textoPregunta");
+
+const respuestasOperacion =
+  document.querySelectorAll(".boton-respuesta");
+
+const resultadoOperacion =
+  document.getElementById("resultadoOperacion");
+
+const contadorAciertos =
+  document.getElementById("contadorAciertos");
+
+const contadorIntentos =
+  document.getElementById("contadorIntentos");
+
+const botonSalirOperacion =
+  document.getElementById("botonSalirOperacion");
+
     let usuarioActual = null;
     let equipoActual = null;
     let cantidadPajaros = 0;
@@ -1512,7 +1548,68 @@ function dibujarJuego() {
 
 }
 
+function actualizarPantallaOperacion() {
 
+  if (!equipoActual || esPantallaPrincipal) {
+    return;
+  }
+
+  if (equipoActual === "pajaro") {
+
+    iconoOperacion.textContent = "🐦";
+
+    nombreEquipoOperacion.textContent =
+      "Equipo pájaro";
+
+  } else {
+
+    iconoOperacion.textContent = "🐜";
+
+    nombreEquipoOperacion.textContent =
+      "Equipo hormiga";
+
+  }
+
+  if (estadoJuego.estado === "jugando") {
+
+    mostrarPantalla("operacion");
+
+    estadoOperacion.textContent =
+      "Partida en curso · " +
+      formatearTiempo(
+        Number(estadoJuego.tiempoRestante || 0)
+      );
+
+    contenidoEsperaOperacion.classList.add("oculto");
+    contenidoPregunta.classList.remove("oculto");
+
+  } else {
+
+    mostrarPantalla("operacion");
+
+    contenidoPregunta.classList.add("oculto");
+    contenidoEsperaOperacion.classList.remove("oculto");
+
+    if (estadoJuego.estado === "pausada") {
+
+      estadoOperacion.textContent =
+        "Partida pausada";
+
+    } else if (estadoJuego.estado === "finalizada") {
+
+      estadoOperacion.textContent =
+        "Partida finalizada";
+
+    } else {
+
+      estadoOperacion.textContent =
+        "Esperando el inicio de la partida";
+
+    }
+
+  }
+
+}
 function actualizarEstadoVisual(distancia) {
 
   const estado =
@@ -1854,6 +1951,7 @@ function escucharEstadoJuego() {
       }
 
       dibujarJuego();
+      actualizarPantallaOperacion();
 
       if (
         estadoJuego.estado === "finalizada"
@@ -1869,25 +1967,30 @@ function escucharEstadoJuego() {
 
 }
     
-    function mostrarPantalla(nombre) {
+function mostrarPantalla(nombre) {
 
-      pantallaEntrada.classList.add("oculto");
-      pantallaEspera.classList.add("oculto");
-      pantallaPrincipal.classList.add("oculto");
+  pantallaEntrada.classList.add("oculto");
+  pantallaEspera.classList.add("oculto");
+  pantallaOperacion.classList.add("oculto");
+  pantallaPrincipal.classList.add("oculto");
 
-      if (nombre === "entrada") {
-        pantallaEntrada.classList.remove("oculto");
-      }
+  if (nombre === "entrada") {
+    pantallaEntrada.classList.remove("oculto");
+  }
 
-      if (nombre === "espera") {
-        pantallaEspera.classList.remove("oculto");
-      }
+  if (nombre === "espera") {
+    pantallaEspera.classList.remove("oculto");
+  }
 
-      if (nombre === "principal") {
-        pantallaPrincipal.classList.remove("oculto");
-      }
+  if (nombre === "operacion") {
+    pantallaOperacion.classList.remove("oculto");
+  }
 
-    }
+  if (nombre === "principal") {
+    pantallaPrincipal.classList.remove("oculto");
+  }
+
+}
 
 
     function mostrarError(error) {
@@ -2116,6 +2219,15 @@ function escucharEstadoJuego() {
       cambiarEquipo
     );
 
+    botonSalirOperacion.addEventListener(
+  "click",
+  async () => {
+
+    await cambiarEquipo();
+
+  }
+);
+    
 botonPantallaPrincipal.addEventListener(
   "click",
   () => {

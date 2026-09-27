@@ -294,7 +294,139 @@
       line-height: 1.45;
       color: #66788a;
     }
+/* PANTALLA DE OPERACIONES */
 
+    .panel-operacion {
+      wi*th: min(100%, 520px);
+      paddin*: 30px;
+      border-radius: 28px;*      background: rgba(255, 255, 2*5, 0.97);
+      box-shadow: 0 20px*55px rgba(36, 52, 71, 0.18);
+     *text-align: center;
+    }
+
+    .ca*ecera-operacion {
+      display: f*ex;
+      align-items: center;
+   *  justify-content: space-between;
+*     gap: 15px;
+      margin-botto*: 22px;
+    }
+
+    .equipo-operaci*n {
+      display: flex;
+      ali*n-items: center;
+      gap: 9px;
+ *    padding: 9px 14px;
+      borde*-radius: 999px;
+      color: white*
+      font-weight: 700;
+    }
+
+  * .equipo-operacion.pajaro {
+      *ackground: var(--pajaro);
+    }
+
+ *  .equipo-operacion.hormiga {
+    * background: var(--hormiga);
+    }*
+    .estado-operacion {
+      pad*ing: 8px 11px;
+      border-radius* 999px;
+      background: #eef3f8;*      color: #536577;
+      font-s*ze: 13px;
+      font-weight: 700;
+*   }
+
+    .pregunta {
+      margin* 25px 0;
+      padding: 25px 15px;*      border-radius: 20px;
+      b*ckground: #f1f5f9;
+      font-size* clamp(37px, 10vw, 57px);
+      fo*t-weight: 700;
+      letter-spacin*: 2px;
+    }
+
+    .respuestas {
+  *   display: grid;
+      grid-templ*te-columns: 1fr 1fr;
+      gap: 13*x;
+    }
+
+    .boton-respuesta {
+ *    min-height: 72px;
+      paddin*: 15px;
+      border: 3px solid tr*nsparent;
+      border-radius: 16p*;
+      background: #edf2f7;
+     *color: var(--texto);
+      font-si*e: 25px;
+      font-weight: 700;
+ *    cursor: pointer;
+      transit*on:
+        transform 0.15s,
+     *  border-color 0.15s,
+        back*round 0.15s;
+    }
+
+    .boton-res*uesta:hover {
+      transform: tra*slateY(-2px);
+      border-color: *ar(--azul);
+    }
+
+    .boton-resp*esta:disabled {
+      cursor: defa*lt;
+      opacity: 0.75;
+      tra*sform: none;
+    }
+
+    .boton-res*uesta.correcta {
+      border-colo*: #249158;
+      background: #dff7*8;
+      color: #176b36;
+    }
+
+  * .boton-respuesta.incorrecta {
+   *  border-color: #d34a4a;
+      bac*ground: #ffe7e7;
+      color: #962*25;
+    }
+
+    .resultado-operacio* {
+      min-height: 58px;
+      m*rgin-top: 19px;
+      padding: 14p*;
+      border-radius: 14px;
+     *background: #eef3f8;
+      line-he*ght: 1.45;
+    }
+
+    .resultado-o*eracion.correcto {
+      backgroun*: #dff7e8;
+      color: #176b36;
+ *  }
+
+    .resultado-operacion.inco*recto {
+      background: #ffe7e7;*      color: #962525;
+    }
+
+    .*stadisticas-personales {
+      dis*lay: flex;
+      justify-content: *enter;
+      gap: 25px;
+      marg*n-top: 18px;
+      color: #66788a;*      font-size: 14px;
+    }
+
+    *estadisticas-personales strong {
+ *    display: block;
+      color: v*r(--texto);
+      font-size: 21px;*    }
+
+    .espera-inicio {
+      *adding: 30px 20px;
+      border-ra*ius: 18px;
+      background: #eef3*8;
+    }
    /* ESCENARIO PRINCIPAL */
 
     .panel-juego {
@@ -752,7 +884,119 @@
       </button>
 
     </section>
+*<!-- PANTALLA DE OPERACIONES -->
 
+*   <section id="pantallaOperacion"*class="panel-operacion oculto">
+
+ *    <div class="cabecera-operacion*>
+
+        <div
+          id="equi*oOperacion"
+          class="equip*-operacion pajaro"
+        >
+     *    <span id="iconoOperacion">🐦</*pan>
+          <span id="nombreEqu*poOperacion">
+            Equipo p*jaro
+          </span>
+        </d*v>
+
+        <div id="estadoOperaci*n" class="estado-operacion">
+     *    En espera
+        </div>
+
+    * </div>
+
+
+      <div id="contenido*speraOperacion" class="espera-inic*o">
+
+        <div id="animalEspera*peracion" class="animal-grande">
+ *        🐦
+        </div>
+
+       *<h2>Prepárate</h2>
+
+        <p>
+  *       Las operaciones aparecerán *uando se inicie la partida.
+      * </p>
+
+      </div>
+
+
+      <div i*="contenidoPregunta" class="oculto*>
+
+        <p>
+          Resuelve a operación para ayudar a tu equip:
+        </p>
+
+        <div id="t*xtoPregunta" class="pregunta">
+   *      8 + 7
+        </div>
+
+      * <div id="respuestasOperacion" cla*s="respuestas">
+
+          <button*            class="boton-respuesta*
+            type="button"
+       *    data-indice="0"
+          >
+  *         13
+          </button>
+
+ *        <button
+            class=*boton-respuesta"
+            type=*button"
+            data-indice="1*
+          >
+            14
+      *   </button>
+
+          <button
+  *         class="boton-respuesta"
+ *          type="button"
+          * data-indice="2"
+          >
+     *      15
+          </button>
+
+    *     <button
+            class="bo*on-respuesta"
+            type="bu*ton"
+            data-indice="3"
+ *        >
+            16
+         *</button>
+
+        </div>
+
+       <div id="resultadoOperacion" class"resultado-operacion">
+          S*lecciona una respuesta.
+        </*iv>
+
+        <div class="estadisti*as-personales">
+
+          <div>
+ *          <strong id="contadorAcie*tos">0</strong>
+            Aciert*s
+          </div>
+
+          <div*
+            <strong id="contadorI*tentos">0</strong>
+            Int*ntos
+          </div>
+
+        </d*v>
+
+      </div>
+
+
+      <button
+ *      id="botonSalirOperacion"
+   *    class="boton-secundario"
+     *  type="button"
+      >
+        Sa*ir del equipo
+      </button>
+
+   *</section>
     <!-- PANTALLA PRINCIPAL DEL JUEGO -->
 
     <section id="pantallaPrincipal" class="panel-juego oculto">
@@ -941,13 +1185,13 @@
 import {
   getDatabase,
   ref,
-  set,
+ *set,
   update,
   remove,
-  onValue,
+  onValue*
   onDisconnect,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
+  runTransaction,*  serverTimestamp
+} from "https://*ww.gstatic.com/firebasejs/12.3.0/f*rebase-database.js";
 
 
     /*
@@ -1061,6 +1305,48 @@ const botonPausar =
 const botonReiniciar =
   document.getElementById("botonReiniciar");
 
+    const pantallaOperacion *
+  document.getElementById("pantal*aOperacion");
+
+const equipoOperaci*n =
+  document.getElementById("equ*poOperacion");
+
+const iconoOperaci*n =
+  document.getElementById("ico*oOperacion");
+
+const nombreEquipoO*eracion =
+  document.getElementByI*("nombreEquipoOperacion");
+
+const *stadoOperacion =
+  document.getEle*entById("estadoOperacion");
+
+const*contenidoEsperaOperacion =
+  docum*nt.getElementById("contenidoEspera*peracion");
+
+const animalEsperaOpe*acion =
+  document.getElementById(*animalEsperaOperacion");
+
+const co*tenidoPregunta =
+  document.getEle*entById("contenidoPregunta");
+
+con*t textoPregunta =
+  document.getEl*mentById("textoPregunta");
+
+const*respuestasOperacion =
+* document.querySelectorAll(".boton*respuesta");
+
+const resultadoOpera*ion =
+ *document.getElementById("resultado*peracion");
+
+const contadorAcierto* =
+ *document.getElementById("contadorA*iertos");
+
+const contadorIntentos *
+  document.getElementById("contad*rIntentos");
+
+const botonSalirOper*cion =
+  document.getElementById("*otonSalirOperacion");
+
     let usuarioActual = null;
     let equipoActual = null;
     let cantidadPajaros = 0;
@@ -1077,6 +1363,261 @@ let estadoJuego = {
   tiempoRestante: 360
 };
 
+    let preguntaActual = null;
+let re*puestaBloqueada = false;
+let acier*osPersonales = 0;
+let intentosPers*nales = 0;
+
+    fu*ction numeroAleatorio(minimo, maxi*o) {
+
+  return Math.floor(
+    Mat*.random() * (maximo - minimo + 1)
+* ) + minimo;
+
+}
+
+
+function mezclar*espuestas(respuestas) {
+
+  return *espuestas
+    .map((valor) => ({
+ *    valor: valor,
+     *orden: Math.random()
+   *}))
+    .sort((a, b) => a.orden - *.orden)
+    .map((elemento) => ele*ento.valor);
+
+}
+
+
+function*generarPregunta() {async function enviarImpulsoEquipo() {
+
+  if (!equipoActual || !usuarioActual) {
+    return;
+  }
+
+  const impulsoRef = ref(
+    database,
+    "salas/" +
+    CODIGO_SALA +
+    "/impulsos/" +
+    equipoActual
+  );
+
+  await runTransaction(
+    impulsoRef,
+    (valorActual) => {
+
+      return Number(valorActual || 0) + 1;
+
+    }
+  );
+
+  await update(
+    ref(
+      database,
+      "salas/" +
+      CODIGO_SALA +
+      "/estadisticas/" +
+      equipoActual
+    ),
+    {
+      ultimaRespuesta: serverTimestamp()
+    }
+  );
+
+}
+
+
+async function comprobarRespuesta(boton) {
+
+  if (
+    respuestaBloqueada ||
+    estadoJuego.estado !== "jugando" ||
+    !preguntaActual
+  ) {
+    return;
+  }
+
+  respuestaBloqueada = true;
+  intentosPersonales += 1;
+
+  contadorIntentos.textContent =
+    intentosPersonales;
+
+  respuestasOperacion.forEach(
+    (elemento) => {
+      elemento.disabled = true;
+    }
+  );
+
+  const respuestaElegida =
+    Number(boton.dataset.respuesta);
+
+  const esCorrecta =
+    respuestaElegida ===
+    preguntaActual.respuestaCorrecta;
+
+  if (esCorrecta) {
+
+    aciertosPersonales += 1;
+
+    contadorAciertos.textContent =
+      aciertosPersonales;
+
+    boton.classList.add("correcta");
+
+    resultadoOperacion.className =
+      "resultado-operacion correcto";
+
+    resultadoOperacion.textContent =
+      equipoActual === "pajaro"
+        ? "¡Correcto! Impulso enviado al pájaro."
+        : "¡Correcto! La hormiga excava hacia abajo.";
+
+    try {
+
+      await enviarImpulsoEquipo();
+
+    } catch (error) {
+
+      mostrarError(error);
+
+    }
+
+  } else {
+
+    boton.classList.add("incorrecta");
+
+    respuestasOperacion.forEach(
+      (elemento) => {
+
+        if (
+          Number(elemento.dataset.respuesta) ===
+          preguntaActual.respuestaCorrecta
+        ) {
+          elemento.classList.add("correcta");
+        }
+
+      }
+    );
+
+    resultadoOperacion.className =
+      "resultado-operacion incorrecto";
+
+    resultadoOperacion.textContent =
+      "No es correcto. La respuesta era " +
+      preguntaActual.respuestaCorrecta +
+      ".";
+
+  }
+
+  setTimeout(() => {
+
+    if (estadoJuego.estado === "jugando") {
+      generarPregunta();
+    }
+
+  }, 900);
+
+}
+
+ *const tipoOperacion =
+   *numeroAleatorio(1, 100);
+
+ *let numero1;
+  let numero2;
+* let operador;
+ *let respuestaCorrecta;
+
+ *if (tipoOperacion <= 40) {
+
+   *numero1 = numeroAleatorio(4, 35);
+*   numero2 = numeroAleatorio(3, 25*;
+    operador = "+";
+    respuest*Correcta = numero1 + numero2;
+
+  }*else if (tipoOperacion <= 75) {
+
+ *  numero1 = numeroAleatorio(12, 45*;
+    numero2 = numeroAleatorio(3,*numero1 - 1);
+    operador = "−";
+*  *respuesta*orrecta = numero1 - numero2;
+
+**} else {
+
+*   numero1 = numeroAleatorio(2, 9)*
+*  numero = numeroAleatorio(2, 9);
+*  *operador = "×";
+*  *respuestaCorrecta = numero1 * nume*o2;
+
+ *}
+
+**const respuestas = new Set();
+ respuestas.add(respuestaCorrecta);
+  while (respuestas.size < 4) {
+
+*   const diferencia =
+*     numeroAleatorio(-6, 6);
+
+*  *const alternativa =
+*    *respuestaCorrecta + diferencia;
+
+*  *if *
+      alternativa*>= 0 &&
+     *alternativa !== respuestaCorrecta
+*   ) {
+*     respuestas.add(alternativa);
+*  *}
+
+ *}
+
+ *pregunta*ctual = {
+*  *texto:
+     numero +
+      " " +
+     *operador +
+     *" " +
+*     numero2,
+*  *respuestaCorrecta: respuestaCorrec*a,
+    respuestas: mezclarRespuest*s(
+      Array.from(respuestas)
+  * )
+* };
+
+ *respuestaBloqueada = false;
+
+ *textoPregunta.textContent =
+   *preguntaActual.texto;
+
+ *respuestasOperacion.forEach(
+    *boton, indice) => {
+
+      boton.t*xtContent =
+        preguntaActual*respuestas[indice];
+
+      boton*dataset.respuesta =
+        pregun*aActual.respuestas[indice];
+
+     *boton.disabled = false;
+
+      bot*n.classList.remove(
+        "corre*ta",
+        "incorrecta"
+     *);
+
+*   }
+* );
+
+**resultadoOperacion.className =
+*   "resultado-operacion";
+
+* resultadoOperacion.textContent =
+*   "Selecciona una respuesta.";
+
+*
+``*
+  
     function calcularDistancia() {
 
   const posicionPajaro =
@@ -1160,7 +1701,78 @@ function dibujarJuego() {
 
 }
 
+function actualizarPantallaParticipante() {
 
+  if (!equipoActual || esPantallaPrincipal) {
+    return;
+  }
+
+  if (equipoActual === "pajaro") {
+
+    equipoOperacion.className =
+      "equipo-operacion pajaro";
+
+    iconoOperacion.textContent = "🐦";
+    nombreEquipoOperacion.textContent =
+      "Equipo pájaro";
+
+    animalEsperaOperacion.textContent = "🐦";
+
+  } else {
+
+    equipoOperacion.className =
+      "equipo-operacion hormiga";
+
+    iconoOperacion.textContent = "🐜";
+    nombreEquipoOperacion.textContent =
+      "Equipo hormiga";
+
+    animalEsperaOperacion.textContent = "🐜";
+
+  }
+
+  if (estadoJuego.estado === "jugando") {
+
+    mostrarPantalla("operacion");
+
+    estadoOperacion.textContent =
+      formatearTiempo(
+        Number(estadoJuego.tiempoRestante || 0)
+      );
+
+    contenidoEsperaOperacion.classList.add("oculto");
+    contenidoPregunta.classList.remove("oculto");
+
+    if (!preguntaActual) {
+      generarPregunta();
+    }
+
+  } else {
+
+    mostrarPantalla("operacion");
+
+    contenidoPregunta.classList.add("oculto");
+    contenidoEsperaOperacion.classList.remove("oculto");
+
+    if (estadoJuego.estado === "pausada") {
+
+      estadoOperacion.textContent = "Pausada";
+
+    } else if (
+      estadoJuego.estado === "finalizada"
+    ) {
+
+      estadoOperacion.textContent = "Finalizada";
+
+    } else {
+
+      estadoOperacion.textContent = "En espera";
+
+    }
+
+  }
+
+}
 function actualizarEstadoVisual(distancia) {
 
   const estado =
@@ -1299,20 +1911,57 @@ async function actualizarMovimiento() {
 
   const gravedadPajaro = 0.12;
   const subidaHormiga = 0.08;
+  const impulsosPajaro =
+  Number(estadoJuego.impulsosPajaro || 0);
 
-  const nuevaPosicionPajaro =
+const impulsosHormiga =
+  Number(estadoJuego.impulsosHormiga || 0);
+
+const nuevosImpulsosPajaro =
+  Math.max(
+    0,
+    impulsosPajaro - impulsosProcesadosPajaro
+  );
+
+const nuevosImpulsosHormiga =
+  Math.max(
+    0,
+    impulsosHormiga - impulsosProcesadosHormiga
+  );
+
+impulsosProcesadosPajaro =
+  impulsosPajaro;
+
+impulsosProcesadosHormiga =
+  impulsosHormiga;
+
+const fuerzaPajaro =
+  Math.min(nuevosImpulsosPajaro * 0.18, 2.5);
+
+const fuerzaHormiga =
+  Math.min(nuevosImpulsosHormiga * 0.18, 2.5);
+
+const nuevaPosicionPajaro =
+  Math.max(
+    5,
     Math.min(
       Number(estadoJuego.pajaro) +
-      gravedadPajaro,
+      gravedadPajaro -
+      fuerzaPajaro,
       95
-    );
+    )
+  );
 
-  const nuevaPosicionHormiga =
+const nuevaPosicionHormiga =
+  Math.min(
+    95,
     Math.max(
       Number(estadoJuego.hormiga) -
-      subidaHormiga,
+      subidaHormiga +
+      fuerzaHormiga,
       5
-    );
+    )
+  );
 
   const nuevoTiempo =
     Math.max(
@@ -1478,6 +2127,35 @@ async function reiniciarPartida() {
 
 }
 
+    function escucharImpulsos() {
+
+  const impulsosRef = ref(
+    database,
+    "salas/" +
+    CODIGO_SALA +
+    "/impulsos"
+  );
+
+  onValue(
+    impulsosRef,
+    (snapshot) => {
+
+      const impulsos =
+        snapshot.val() || {};
+
+      estadoJuego.impulsosPajaro =
+        Number(impulsos.pajaro || 0);
+
+      estadoJuego.impulsosHormiga =
+        Number(impulsos.hormiga || 0);
+
+    },
+    (error) => {
+      mostrarError(error);
+    }
+  );
+
+}
 
 function escucharEstadoJuego() {
 
@@ -1502,6 +2180,7 @@ function escucharEstadoJuego() {
       }
 
       dibujarJuego();
+      actualizarPantallaParticipante();
 
       if (
         estadoJuego.estado === "finalizada"
@@ -1522,6 +2201,7 @@ function escucharEstadoJuego() {
       pantallaEntrada.classList.add("oculto");
       pantallaEspera.classList.add("oculto");
       pantallaPrincipal.classList.add("oculto");
+      pantallaOperacion.classList.add("oculto");
 
       if (nombre === "entrada") {
         pantallaEntrada.classList.remove("oculto");
@@ -1534,7 +2214,9 @@ function escucharEstadoJuego() {
       if (nombre === "principal") {
         pantallaPrincipal.classList.remove("oculto");
       }
-
+if (nombre === "operacion") {
+  pantallaOperacion.classList.remove("oculto");
+}
     }
 
 
@@ -1785,7 +2467,34 @@ botonVolverEntrada.addEventListener(
 
   }
 );
+    
+respuestasOperacion.forEach((boton) => {
 
+  boton.addEventListener(
+    "click",
+    () => comprobarRespuesta(boton)
+  );
+
+});
+
+
+botonSalirOperacion.addEventListener(
+  "click",
+  async () => {
+
+    preguntaActual = null;
+    aciertosPersonales = 0;
+    intentosPersonales = 0;
+    let impulsosProcesadosPajaro = 0;
+let impulsosProcesadosHormiga = 0;
+
+    contadorAciertos.textContent = "0";
+    contadorIntentos.textContent = "0";
+
+    await cambiarEquipo();
+
+  }
+);
     botonIniciar.addEventListener(
   "click",
   iniciarPartida
@@ -1813,8 +2522,9 @@ botonReiniciar.addEventListener(
         textoConexion.textContent =
           "Conectado con la partida";
 
-        escucharParticipantes();
-        escucharEstadoJuego();
+escucharParticipantes();
+escucharEstadoJuego();
+escucharImpulsos();
 
         const equipoGuardado =
           localStorage.getItem("equipoMMT26");

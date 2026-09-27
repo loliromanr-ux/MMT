@@ -577,7 +577,41 @@
       margin-top: 15px;
       color: #66788a;
       font-size: 13px;
-    } @media (max-width: 620px) {
+    } @media (max-width: 620px) {.panel-juego {
+        padding: 14px;
+      }
+
+      .cabecera-juego {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 9px;
+      }
+
+      .zona-marcadores {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .marcador:last-child {
+        grid-column: 1 / -1;
+      }
+
+      .escenario {
+        height: 450px;
+      }
+
+      .personaje {
+        width: 68px;
+        height: 68px;
+        font-size: 54px;
+      }
+
+      .linea-margen {
+        left: calc(50% + 48px);
+      }
+
+      .boton-control {
+        min-width: calc(50% - 7px);
+      }
       body {
         padding: 14px;
       }

@@ -1367,6 +1367,226 @@ let estadoJuego = {
   tiempoRestante: 360
 };
 
+let preguntaActual = null;
+let respuestaBloqueada = false;
+let aciertosPersonales = 0;
+let intentosPersonales = 0;
+    
+function numeroAleatorio(minimo, maximo) {
+
+  return Math.floor(
+    Math.random() * (maximo - minimo + 1)
+  ) + minimo;
+
+}
+
+
+function mezclarRespuestas(respuestas) {
+
+  return respuestas
+    .map((valor) => ({
+      valor: valor,
+      orden: Math.random()
+    }))
+    .sort((a, b) => a.orden - b.orden)
+    .map((elemento) => elemento.valor);
+
+}
+
+
+function generarPregunta() {
+
+  const tipoOperacion =
+    numeroAleatorio(1, 100);
+
+  let numero1;
+  let numero2;
+  let operador;
+  let respuestaCorrecta;
+
+  if (tipoOperacion <= 40) {
+
+    numero1 = numeroAleatorio(4, 35);
+    numero2 = numeroAleatorio(3, 25);
+    operador = "+";
+    respuestaCorrecta = numero1 + numero2;
+
+  } else if (tipoOperacion <= 75) {
+
+    numero1 = numeroAleatorio(12, 45);
+    numero2 = numeroAleatorio(3, numero1 - 1);
+    operador = "−";
+    respuestaCorrecta = numero1 - numero2;
+
+  } else {
+
+    numero1 = numeroAleatorio(2, 9);
+    numero2 = numeroAleatorio(2, 9);
+    operador = "×";
+    respuestaCorrecta = numero1 * numero2;
+
+  }
+
+  const respuestas = new Set();
+
+  respuestas.add(respuestaCorrecta);
+
+  while (respuestas.size < 4) {
+
+    const diferencia =
+      numeroAleatorio(-6, 6);
+
+    const alternativa =
+      respuestaCorrecta + diferencia;
+
+    if (
+      alternativa >= 0 &&
+      alternativa !== respuestaCorrecta
+    ) {
+      respuestas.add(alternativa);
+    }
+
+  }
+
+  preguntaActual = {
+    texto:
+      numero1 +
+      " " +
+      operador +
+      " " +
+      numero2,
+
+    respuestaCorrecta:
+      respuestaCorrecta,
+
+    respuestas:
+      mezclarRespuestas(
+        Array.from(respuestas)
+      )
+  };
+
+  respuestaBloqueada = false;
+
+  textoPregunta.textContent =
+    preguntaActual.texto;
+
+  respuestasOperacion.forEach(
+    (boton, indice) => {
+
+      boton.textContent =
+        preguntaActual.respuestas[indice];
+
+      boton.dataset.respuesta =
+        preguntaActual.respuestas[indice];
+
+      boton.disabled = false;
+
+      boton.classList.remove(
+        "correcta",
+        "incorrecta"
+      );
+
+    }
+  );
+
+  resultadoOperacion.textContent =
+    "Selecciona una respuesta.";
+
+  resultadoOperacion.style.background =
+    "#eef3f8";
+
+  resultadoOperacion.style.color =
+    "#243447";
+
+}    
+function comprobarRespuesta(boton) {
+
+  if (
+    respuestaBloqueada ||
+    estadoJuego.estado !== "jugando" ||
+    !preguntaActual
+  ) {
+    return;
+  }
+
+  respuestaBloqueada = true;
+  intentosPersonales += 1;
+
+  contadorIntentos.textContent =
+    intentosPersonales;
+
+  respuestasOperacion.forEach(
+    (elemento) => {
+
+      elemento.disabled = true;
+
+    }
+  );
+
+  const respuestaElegida =
+    Number(boton.dataset.respuesta);
+
+  const esCorrecta =
+    respuestaElegida ===
+    preguntaActual.respuestaCorrecta;
+
+  if (esCorrecta) {
+
+    aciertosPersonales += 1;
+
+    contadorAciertos.textContent =
+      aciertosPersonales;
+
+    boton.classList.add("correcta");
+
+    resultadoOperacion.textContent =
+      "¡Correcto! Respuesta registrada.";
+
+    resultadoOperacion.style.background =
+      "#dff7e8";
+
+    resultadoOperacion.style.color =
+      "#176b36";
+
+  } else {
+
+    boton.classList.add("incorrecta");
+
+    respuestasOperacion.forEach(
+      (elemento) => {
+
+        if (
+          Number(elemento.dataset.respuesta) ===
+          preguntaActual.respuestaCorrecta
+        ) {
+          elemento.classList.add("correcta");
+        }
+
+      }
+    );
+
+    resultadoOperacion.textContent =
+      "No es correcto. La respuesta era " +
+      preguntaActual.respuestaCorrecta +
+      ".";
+
+    resultadoOperacion.style.background =
+      "#ffe7e7";
+
+    resultadoOperacion.style.color =
+      "#962525";
+
+  }
+
+  setTimeout(() => {
+
+    if (estadoJuego.estado === "jugando") {
+      generarPregunta();
+    }
+
+  }, 900);
+
+}    
     function calcularDistancia() {
 
   const posicionPajaro =
@@ -2152,6 +2372,14 @@ botonVolverEntrada.addEventListener(
   }
 );
 
+respuestasOperacion.forEach((boton) => {
+
+  boton.addEventListener(
+    "click",
+    () => comprobarRespuesta(boton)
+  );
+
+});    
     botonIniciar.addEventListener(
   "click",
   iniciarPartida

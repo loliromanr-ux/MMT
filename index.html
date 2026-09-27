@@ -403,6 +403,59 @@
      *color: var(--texto);
       font-si*e: 21px;
     }
+      /* OPERACIONES ARITMETICAS */
+
+    #textoPregunta {
+      marg*n: 22px 0;
+      padding: 24px;
+  *   border-radius: 18px;
+      back*round: #eef3f8;
+      font-size: 4*px;
+      font-weight: 700;
+      *ext-align: center;
+    }
+
+    #res*uestasOperacion {
+      display: g*id;
+      grid-template-columns: 1*r 1fr;
+      gap: 12px;
+    }
+
+   *.boton-respuesta {
+      min-heigh*: 70px;
+      padding: 14px;
+     *border: 3px solid transparent;
+   *  border-radius: 15px;
+      backg*ound: #edf2f7;
+      color: var(--*exto);
+      font-size: 24px;
+    * font-weight: 700;
+      cursor: p*inter;
+    }
+
+    .boton-respuesta*hover {
+      border-color: var(--*zul);
+    }
+
+    .boton-respuesta.*orrecta {
+      border-color: #249*58;
+      background: #dff7e8;
+   *  color: #176b36;
+    }
+
+    .boto*-respuesta.incorrecta {
+      bord*r-color: #d34a4a;
+      background* #ffe7e7;
+      color: #962525;
+  * }
+
+    #resultadoOperacion {
+    * min-height: 52px;
+      margin-to*: 18px;
+      padding: 14px;
+      border-radius: 12px;
+      background: #eef3f8;
+    }
    /* ESCENARIO PRINCIPAL */
 
     .panel-juego {
@@ -958,6 +1011,100 @@
       </button>
 
    *</section>
+
+        <!-- PANTALLA DE OPERACIONES -->
+
+    <section id="pantallaOperacion" class="panel oculto">
+
+      <div class="logo-animales">
+        <span id="iconoOperacion">🐦</span>
+      </div>
+
+      <h2 id="nombreEquipoOperacion">
+        Equipo pájaro
+      </h2>
+
+      <p id="estadoOperacion" class="subtitulo">
+        Esperando el inicio de la partida
+      </p>
+
+      <div id="contenidoPregunta" class="oculto">
+
+        <p>
+          Resuelve la operación:
+        </p>
+
+        <div id="textoPregunta">
+          8 + 7
+        </div>
+
+        <div id="respuestasOperacion">
+
+          <button
+            class="boton-respuesta"
+            type="button"
+          >
+            13
+          </button>
+
+          <button
+            class="boton-respuesta"
+            type="button"
+          >
+            14
+          </button>
+
+          <button
+            class="boton-respuesta"
+            type="button"
+          >
+            15
+          </button>
+
+          <button
+            class="boton-respuesta"
+            type="button"
+          >
+            16
+          </button>
+
+        </div>
+
+        <div id="resultadoOperacion">
+          Selecciona una respuesta.
+        </div>
+
+        <p>
+          Aciertos:
+          <strong id="contadorAciertos">0</strong>
+
+          · Intentos:
+          <strong id="contadorIntentos">0</strong>
+        </p>
+
+      </div>
+
+      <div id="contenidoEsperaOperacion" class="caja-espera">
+
+        <div class="pulso"></div>
+
+        <strong>Prepárate</strong>
+
+        <p>
+          Las operaciones aparecerán cuando comience la partida.
+        </p>
+
+      </div>
+
+      <button
+        id="botonSalirOperacion"
+        class="boton-secundario"
+        type="button"
+      >
+        Salir del equipo
+      </button>
+
+    </section>
     <!-- PANTALLA PRINCIPAL DEL JUEGO -->
 
     <section id="pantallaPrincipal" class="panel-juego oculto">

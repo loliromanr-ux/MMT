@@ -294,7 +294,115 @@
       line-height: 1.45;
       color: #66788a;
     }
+/* PANTALLA DE*OPERACIONES */
 
+    .panel-operaci*n {
+      width: min(100%, 520px);*      padding: 30px;
+      border-*adius: 28px;
+      background: rgb*(255, 255, 255, 0.97);
+      box-s*adow: 0 20px 55px rgba(36, 52, 71,*0.18);
+      text-align: center;
+ *  }
+
+    .cabecera-operacion {
+   *  display: flex;
+      align-items* center;
+      justify-content: sp*ce-between;
+      gap: 15px;
+     *margin-bottom: 22px;
+    }
+
+    .e*uipo-operacion {
+      display: fl*x;
+      align-items: center;
+    * gap: 9px;
+      padding: 9px 14px*
+      border-radius: 999px;
+     *color: white;
+      font-weight: 7*0;
+    }
+
+    .equipo-operacion.pa*aro {
+      background: var(--paja*o);
+    }
+
+    .equipo-operacion.h*rmiga {
+      background: var(--ho*miga);
+    }
+
+    .estado-operacio* {
+      padding: 8px 11px;
+      *order-radius: 999px;
+      backgro*nd: #eef3f8;
+      color: #536577;*      font-size: 13px;
+      font-*eight: 700;
+    }
+
+    .pregunta {*      margin: 25px 0;
+      paddin*: 25px 15px;
+      border-radius: *0px;
+      background: #f1f5f9;
+  *   font-size: clamp(37px, 10vw, 57*x);
+      font-weight: 700;
+      *etter-spacing: 2px;
+    }
+
+    .re*puestas {
+      display: grid;
+   *  grid-template-columns: 1fr 1fr;
+*     gap: 13px;
+    }
+
+    .boton-*espuesta {
+      min-height: 72px;*      padding: 15px;
+      border:*3px solid transparent;
+      borde*-radius: 16px;
+      background: #*df2f7;
+      color: var(--texto);
+*     font-size: 25px;
+      font-w*ight: 700;
+      cursor: pointer;
+*   }
+
+    .boton-respuesta:hover {*      border-color: var(--azul);
+ *    transform: translateY(-2px);
+ *  }
+
+    .boton-respuesta.correcta*{
+      border-color: #249158;
+   *  background: #dff7e8;
+      color* #176b36;
+    }
+
+    .boton-respue*ta.incorrecta {
+      border-color* #d34a4a;
+      background: #ffe7e*;
+      color: #962525;
+    }
+
+   *.resultado-operacion {
+      min-h*ight: 58px;
+      margin-top: 19px*
+      padding: 14px;
+      border*radius: 14px;
+      background: #e*f3f8;
+      line-height: 1.45;
+   *}
+
+    .estadisticas-personales {
+*     display: flex;
+      justify-*ontent: center;
+      gap: 30px;
+ *    margin-top: 18px;
+      color:*#66788a;
+      font-size: 14px;
+  * }
+
+    .estadisticas-personales s*rong {
+      display: block;
+     *color: var(--texto);
+      font-si*e: 21px;
+    }
    /* ESCENARIO PRINCIPAL */
 
     .panel-juego {
@@ -752,7 +860,104 @@
       </button>
 
     </section>
+<!-- PANTALLA D* OPERACIONES -->
 
+    <section
+   *  id="pantallaOperacion"
+      cla*s="panel-operacion oculto"
+    >
+
+*     <div class="cabecera-operacio*">
+
+        <div
+          id="equ*poOperacion"
+          class="equi*o-operacion pajaro"
+        >
+    *     <span id="iconoOperacion">🐦<*span>
+
+          <span id="nombreE*uipoOperacion">
+            Equipo*pájaro
+          </span>
+        <*div>
+
+        <div
+          id="e*tadoOperacion"
+          class="es*ado-operacion"
+        >
+         *Partida en curso
+        </div>
+
+ *    </div>
+
+      <p>
+        Resu*lve la operación para ayudar a tu *quipo:
+      </p>
+
+      <div id="*extoPregunta" class="pregunta">
+  *     8 + 7
+      </div>
+
+      <di* class="respuestas">
+
+        <but*on
+          class="boton-respuest*"
+          type="button"
+        *
+          13
+        </button>
+
+ *      <button
+          class="bot*n-respuesta"
+          type="butto*"
+        >
+          14
+        <*button>
+
+        <button
+         *class="boton-respuesta"
+          *ype="button"
+        >
+          1*
+        </button>
+
+        <butto*
+          class="boton-respuesta"*          type="button"
+        >
+*         16
+        </button>
+
+   *  </div>
+
+      <div
+        id="r*sultadoOperacion"
+        class="r*sultado-operacion"
+      >
+       *Selecciona una respuesta.
+      </*iv>
+
+      <div class="estadistica*-personales">
+
+        <div>
+     *    <strong id="contadorAciertos">*</strong>
+          Aciertos
+     *  </div>
+
+        <div>
+          *strong id="contadorIntentos">0</st*ong>
+          Intentos
+        </*iv>
+
+      </div>
+
+      <button
+ *      id="botonVolverEspera"
+     *  class="boton-secundario"
+       *type="button"
+      >
+        Volv*r a la espera
+      </button>
+
+   *</section>
     <!-- PANTALLA PRINCIPAL DEL JUEGO -->
 
     <section id="pantallaPrincipal" class="panel-juego oculto">

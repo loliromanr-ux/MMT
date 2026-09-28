@@ -730,6 +730,138 @@
       cursor: not-allowed;
     }
 
+      /* ELEMENTOS EXTERNOS */
+
+    .evento-visual {
+      position: absolute;
+      z-index: 7;
+      pointer-events: none;
+      filter: drop-shadow(
+        0 7px 6px rgba(0, 0, 0, 0.2)
+      );
+    }
+
+    .evento-nube {
+      top: 8%;
+      left: 16%;
+      font-size: 65px;
+      animation: moverNube 3s ease-in-out infinite;
+    }
+
+    .evento-viento {
+      top: 24%;
+      right: 14%;
+      font-size: 70px;
+      animation: moverViento 1s ease-in-out infinite;
+    }
+
+    .evento-raices {
+      bottom: 5%;
+      left: 22%;
+      font-size: 75px;
+      animation: moverRaices 1.2s ease-in-out infinite;
+    }
+
+    @keyframes moverNube {
+
+      0% {
+        transform: translateX(-12px);
+      }
+
+      50% {
+        transform: translateX(18px);
+      }
+
+      100% {
+        transform: translateX(-12px);
+      }
+
+    }
+
+    @keyframes moverViento {
+
+      0% {
+        transform: translateX(0);
+      }
+
+      50% {
+        transform: translateX(-22px);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+
+    }
+
+    @keyframes moverRaices {
+
+      0% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
+
+    }
+
+    .panel-elementos {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+      padding: 14px;
+      border-radius: 15px;
+      background: #eef3f8;
+    }
+
+    .titulo-elementos {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      color: #536577;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .boton-elemento {
+      padding: 10px 14px;
+      border: 2px solid transparent;
+      border-radius: 10px;
+      background: white;
+      color: var(--texto);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .boton-elemento:hover {
+      border-color: var(--azul);
+    }
+
+    .boton-elemento.activo {
+      border-color: #e59a19;
+      background: #fff4d8;
+      color: #8a6415;
+    }
+
+    .boton-cancelar-elemento {
+      background: #637487;
+      color: white;
+    }
+
+    .boton-elemento:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+      
     .leyenda-juego {
       display: flex;
       flex-wrap: wrap;
@@ -1062,6 +1194,18 @@
           ☁️
         </div>
 
+        <div id="eventoNube" class="evento-visual evento-nube oculto">
+  ☁️ ☁️
+</div>
+
+<div id="eventoViento" class="evento-visual evento-viento oculto">
+  💨
+</div>
+
+<div id="eventoRaices" class="evento-visual evento-raices oculto">
+  🌳
+</div>
+        
         <div class="hierba">
           ︿︿︿︿︿︿︿︿︿︿︿︿︿︿︿︿
         </div>
@@ -1159,7 +1303,45 @@
 
       </div>
 
+<div class="panel-elementos">
 
+  <span class="titulo-elementos">
+    Elementos
+  </span>
+
+  <button
+    id="botonNube"
+    class="boton-elemento"
+    type="button"
+  >
+    ☁️ Nube
+  </button>
+
+  <button
+    id="botonViento"
+    class="boton-elemento"
+    type="button"
+  >
+    💨 Viento
+  </button>
+
+  <button
+    id="botonRaices"
+    class="boton-elemento"
+    type="button"
+  >
+    🌳 Raíces
+  </button>
+
+  <button
+    id="botonCancelarElementos"
+    class="boton-elemento boton-cancelar-elemento"
+    type="button"
+  >
+    Cancelar elementos
+  </button>
+
+</div>
       <div class="leyenda-juego">
 
         <span>
@@ -1315,6 +1497,30 @@ const botonPausar =
 
 const botonReiniciar =
   document.getElementById("botonReiniciar");
+
+    const eventoNube =
+  document.getElementById("eventoNube");
+
+const eventoViento =
+  document.getElementById("eventoViento");
+
+const eventoRaices =
+  document.getElementById("eventoRaices");
+
+const botonNube =
+  document.getElementById("botonNube");
+
+const botonViento =
+  document.getElementById("botonViento");
+
+const botonRaices =
+  document.getElementById("botonRaices");
+
+const botonCancelarElementos =
+  document.getElementById(
+    "botonCancelarElementos"
+  );
+    
 
     const pantallaOperacion =
   document.getElementById("pantallaOperacion");
@@ -1638,6 +1844,40 @@ async function comprobarRespuesta(boton) {
   }, 900);
 
 }    
+    
+    function mostrarElementoVisual(tipo) {
+
+  eventoNube.classList.add("oculto");
+  eventoViento.classList.add("oculto");
+  eventoRaices.classList.add("oculto");
+
+  botonNube.classList.remove("activo");
+  botonViento.classList.remove("activo");
+  botonRaices.classList.remove("activo");
+
+  if (tipo === "nube") {
+
+    eventoNube.classList.remove("oculto");
+    botonNube.classList.add("activo");
+
+  }
+
+  if (tipo === "viento") {
+
+    eventoViento.classList.remove("oculto");
+    botonViento.classList.add("activo");
+
+  }
+
+  if (tipo === "raices") {
+
+    eventoRaices.classList.remove("oculto");
+    botonRaices.classList.add("activo");
+
+  }
+
+}
+    
     function calcularDistancia() {
 
   const posicionPajaro =
@@ -2545,6 +2785,27 @@ botonPausar.addEventListener(
   pausarOReanudarPartida
 );
 
+botonNube.addEventListener(
+  "click",
+  () => mostrarElementoVisual("nube")
+);
+
+botonViento.addEventListener(
+  "click",
+  () => mostrarElementoVisual("viento")
+);
+
+botonRaices.addEventListener(
+  "click",
+  () => mostrarElementoVisual("raices")
+);
+
+botonCancelarElementos.addEventListener(
+  "click",
+  () => mostrarElementoVisual(null)
+);
+``
+    
 botonReiniciar.addEventListener(
   "click",
   reiniciarPartida

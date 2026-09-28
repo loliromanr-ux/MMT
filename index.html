@@ -1367,6 +1367,10 @@ import {
 
     const CODIGO_SALA = "MMT26";
 
+const parametrosURL = new URLSearchParams(window.location.search);
+const equipoURL = parametrosURL.get("equipo");
+const modoAdmin = parametrosURL.get("admin") === "1";
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const database = getDatabase(app);
@@ -2876,6 +2880,17 @@ function mostrarPantalla(nombre) {
     }
 
 
+
+function configurarAccesoDirecto() {
+  if (!modoAdmin) {
+    botonPantallaPrincipal.classList.add("oculto");
+  }
+
+  if (modoAdmin) {
+    botonPantallaPrincipal.classList.remove("oculto");
+  }
+}
+
     botonPajaro.addEventListener(
       "click",
       () => elegirEquipo("pajaro")
@@ -2910,11 +2925,12 @@ contadorIntentos.textContent = "0";
 botonPantallaPrincipal.addEventListener(
   "click",
   () => {
-
+    if (!modoAdmin) {
+      return;
+    }
     esPantallaPrincipal = true;
     mostrarPantalla("principal");
     dibujarJuego();
-
   }
 );
 
@@ -2977,6 +2993,8 @@ botonReiniciar.addEventListener(
   reiniciarPartida
 );
 
+    configurarAccesoDirecto();
+
     onAuthStateChanged(auth, async (usuario) => {
 
       if (usuario) {
@@ -2992,13 +3010,18 @@ botonReiniciar.addEventListener(
         escucharParticipantes();
         escucharEstadoJuego();
 escucharImpulsos();
-        
         const equipoGuardado =
           localStorage.getItem("equipoMMT26");
 
         if (
-          equipoGuardado === "pajaro" ||
-          equipoGuardado === "hormiga"
+          equipoURL === "pajaro" ||
+          equipoURL === "hormiga"
+        ) {
+          await elegirEquipo(equipoURL);
+        } else if (
+          !modoAdmin &&
+          (equipoGuardado === "pajaro" ||
+          equipoGuardado === "hormiga")
         ) {
           await elegirEquipo(equipoGuardado);
         }

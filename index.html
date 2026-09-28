@@ -1200,6 +1200,7 @@ import {
   remove,
   onValue,
   onDisconnect,
+  runTransaction,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
 
@@ -1371,6 +1372,12 @@ let preguntaActual = null;
 let respuestaBloqueada = false;
 let aciertosPersonales = 0;
 let intentosPersonales = 0;
+
+let impulsosPajaroRecibidos = 0;
+let impulsosHormigaRecibidos = 0;
+
+let impulsosPajaroProcesados = 0;
+let impulsosHormigaProcesados = 0;
     
 function numeroAleatorio(minimo, maximo) {
 
@@ -1498,8 +1505,34 @@ function generarPregunta() {
   resultadoOperacion.style.color =
     "#243447";
 
-}    
-function comprobarRespuesta(boton) {
+}  
+
+    async function enviarAciertoFirebase() {
+
+  if (!equipoActual || !usuarioActual) {
+    return;
+  }
+
+  const contadorRef = ref(
+    database,
+    "salas/" +
+    CODIGO_SALA +
+    "/impulsos/" +
+    equipoActual
+  );
+
+  await runTransaction(
+    contadorRef,
+    (valorActual) => {
+
+      return Number(valorActual || 0) + 1;
+
+    }
+  );
+
+}
+
+async function comprobarRespuesta(boton) {
 
   if (
     respuestaBloqueada ||
@@ -1541,6 +1574,24 @@ function comprobarRespuesta(boton) {
 
     resultadoOperacion.textContent =
       "¡Correcto! Respuesta registrada.";
+
+    try {
+
+  await enviarAciertoFirebase();
+
+  resultadoOperacion.textContent =
+    equipoActual === "pajaro"
+      ? "¡Correcto! Impulso enviado al pájaro."
+      : "¡Correcto! La hormiga excava hacia abajo.";
+
+} catch (error) {
+
+  console.error(error);
+
+  resultadoOperacion.textContent =
+    "Respuesta correcta, pero no se pudo enviar el impulso.";
+
+}
 
     resultadoOperacion.style.background =
       "#dff7e8";
@@ -1878,19 +1929,59 @@ async function actualizarMovimiento() {
   const gravedadPajaro = 0.12;
   const subidaHormiga = 0.08;
 
-  const nuevaPosicionPajaro =
+  const nuevosImpulsosPajaro =
+  Math.max(
+    0,
+    impulsosPajaroRecibidos -
+    impulsosPajaroProcesados
+  );
+
+const nuevosImpulsosHormiga =
+  Math.max(
+    0,
+    impulsosHormigaRecibidos -
+    impulsosHormigaProcesados
+  );
+
+impulsosPajaroProcesados =
+  impulsosPajaroRecibidos;
+
+impulsosHormigaProcesados =
+  impulsosHormigaRecibidos;
+
+const fuerzaPajaro =
+  Math.min(
+    nuevosImpulsosPajaro * 0.18,
+    2.5
+  );
+
+const fuerzaHormiga =
+  Math.min(
+    nuevosImpulsosHormiga * 0.18,
+    2.5
+  );
+  
+const nuevaPosicionPajaro =
+  Math.max(
+    5,
     Math.min(
       Number(estadoJuego.pajaro) +
-      gravedadPajaro,
+      gravedadPajaro -
+      fuerzaPajaro,
       95
-    );
+    )
+  );
 
-  const nuevaPosicionHormiga =
+const nuevaPosicionHormiga =
+  Math.min(
+    95,
     Math.max(
       Number(estadoJuego.hormiga) -
-      subidaHormiga,
+      subidaHormiga +
+      fuerzaHormiga,
       5
-    );
+    )
+  );
 
   const nuevoTiempo =
     Math.max(
@@ -1944,9 +2035,25 @@ async function iniciarPartida() {
 
   esPantallaPrincipal = true;
   detenerIntervaloJuego();
+  impulsosPajaroRecibidos = 0;
+impulsosHormigaRecibidos = 0;
+impulsosPajaroProcesados = 0;
+impulsosHormigaProcesados = 0;
 
   try {
 
+    await set(
+  ref(
+    database,
+    "salas/" +
+    CODIGO_SALA +
+    "/impulsos"
+  ),
+  {
+    pajaro: 0,
+    hormiga: 0
+  }
+);
     await set(
       ref(
         database,
@@ -2056,7 +2163,41 @@ async function reiniciarPartida() {
 
 }
 
+function escucharImpulsos() {
 
+  const impulsosRef = ref(
+    database,
+    "salas/" +
+    CODIGO_SALA +
+    "/impulsos"
+  );
+
+  onValue(
+    impulsosRef,
+    (snapshot) => {
+
+      const impulsos =
+        snapshot.val() || {};
+
+      impulsosPajaroRecibidos =
+        Number(impulsos.pajaro || 0);
+
+      impulsosHormigaRecibidos =
+        Number(impulsos.hormiga || 0);
+
+    },
+    (error) => {
+
+      console.error(
+        "Error al escuchar impulsos:",
+        error
+      );
+
+    }
+  );
+
+}
+    
 function escucharEstadoJuego() {
 
   const juegoRef = ref(

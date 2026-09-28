@@ -1565,6 +1565,7 @@ const botonSalirOperacion =
     
 let esPantallaPrincipal = false;
 let intervaloJuego = null;
+let temporizadorElemento = null;
 
 let estadoJuego = {
   estado: "preparada",
@@ -1877,6 +1878,20 @@ async function comprobarRespuesta(boton) {
   }
 
 }
+
+    async function activarElemento(tipo, duracionSegundos) {
+
+  // Código de activación sincronizada
+
+}
+
+
+async function cancelarElementoActivo() {
+
+  // Código de cancelación
+
+}
+``
     
     function calcularDistancia() {
 
@@ -1957,6 +1972,25 @@ function dibujarJuego() {
     lineaMargen.classList.add("critico");
   }
 
+  function actualizarBotonesElementos() {
+
+  const partidaActiva =
+    estadoJuego.estado === "jugando";
+
+  botonNube.disabled =
+    !partidaActiva;
+
+  botonViento.disabled =
+    !partidaActiva;
+
+  botonRaices.disabled =
+    !partidaActiva;
+
+  botonCancelarElementos.disabled =
+    !partidaActiva ||
+    !estadoJuego.elementoActivo;
+
+}
   actualizarEstadoVisual(distancia);
 
 }
@@ -2034,6 +2068,8 @@ function actualizarEstadoVisual(distancia) {
 
   const estado =
     estadoJuego.estado || "preparada";
+  
+  actualizarBotonesElementos();
 
   const tiempo =
     Number(estadoJuego.tiempoRestante ?? 360);
@@ -2166,8 +2202,29 @@ async function actualizarMovimiento() {
     return;
   }
 
-  const gravedadPajaro = 0.12;
-  const subidaHormiga = 0.08;
+let gravedadPajaro = 0.12;
+let subidaHormiga = 0.08;
+
+const elementoActivo =
+  estadoJuego.elementoActivo || null;
+
+if (elementoActivo === "nube") {
+
+  gravedadPajaro += 0.08;
+
+}
+
+if (elementoActivo === "viento") {
+
+  gravedadPajaro += 0.16;
+
+}
+
+if (elementoActivo === "raices") {
+
+  subidaHormiga += 0.14;
+
+}
 
   const nuevosImpulsosPajaro =
   Math.max(
@@ -2275,6 +2332,13 @@ async function iniciarPartida() {
 
   esPantallaPrincipal = true;
   detenerIntervaloJuego();
+  if (temporizadorElemento !== null) {
+
+  clearTimeout(temporizadorElemento);
+  temporizadorElemento = null;
+
+}
+  
   impulsosPajaroRecibidos = 0;
 impulsosHormigaRecibidos = 0;
 impulsosPajaroProcesados = 0;
@@ -2307,6 +2371,9 @@ impulsosHormigaProcesados = 0;
         hormiga: 82,
         duracion: 360,
         tiempoRestante: 360,
+        elementoActivo: null,
+elementoInicio: null,
+elementoDuracion: 0,
         inicio: serverTimestamp(),
         ultimaActualizacion: serverTimestamp()
       }
@@ -2374,6 +2441,12 @@ async function pausarOReanudarPartida() {
 async function reiniciarPartida() {
 
   detenerIntervaloJuego();
+  if (temporizadorElemento !== null) {
+
+  clearTimeout(temporizadorElemento);
+  temporizadorElemento = null;
+
+}
 
   try {
 
@@ -2390,6 +2463,9 @@ async function reiniciarPartida() {
         hormiga: 82,
         duracion: 360,
         tiempoRestante: 360,
+        elementoActivo: null,
+elementoInicio: null,
+elementoDuracion: 0,
         reinicio: serverTimestamp(),
         ultimaActualizacion: serverTimestamp()
       }
@@ -2461,6 +2537,10 @@ function escucharEstadoJuego() {
       }
 
       dibujarJuego();
+      mostrarElementoVisual(
+  estadoJuego.elementoActivo || null
+);
+      
       actualizarPantallaOperacion();
 
       if (
@@ -2787,24 +2867,23 @@ botonPausar.addEventListener(
 
 botonNube.addEventListener(
   "click",
-  () => mostrarElementoVisual("nube")
+  () => activarElemento("nube", 12)
 );
 
 botonViento.addEventListener(
   "click",
-  () => mostrarElementoVisual("viento")
+  () => activarElemento("viento", 8)
 );
 
 botonRaices.addEventListener(
   "click",
-  () => mostrarElementoVisual("raices")
+  () => activarElemento("raices", 12)
 );
 
 botonCancelarElementos.addEventListener(
   "click",
-  () => mostrarElementoVisual(null)
+  cancelarElementoActivo
 );
-``
     
 botonReiniciar.addEventListener(
   "click",

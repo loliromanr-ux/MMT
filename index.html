@@ -564,11 +564,11 @@
     }
 
     #personajePajaro {
-      top: 20%;
+      top: 7.5%;
     }
 
     #personajeHormiga {
-      top: 82%;
+      top: 92.5%;
     }
 
     .etiqueta-personaje {
@@ -1531,8 +1531,8 @@ let temporizadorElemento = null;
 
 let estadoJuego = {
   estado: "preparada",
-  pajaro: 20,
-  hormiga: 82,
+  pajaro: 7.5,
+  hormiga: 92.5,
   duracion: 360,
   tiempoRestante: 360
 };
@@ -1953,8 +1953,8 @@ async function cancelarElementoActivo() {
 
     
 function calcularDistancia() {
-  const posicionPajaro = Number(estadoJuego.pajaro ?? 20);
-  const posicionHormiga = Number(estadoJuego.hormiga ?? 82);
+  const posicionPajaro = Number(estadoJuego.pajaro ?? 7.5);
+  const posicionHormiga = Number(estadoJuego.hormiga ?? 92.5);
   return Math.max(0, posicionHormiga - posicionPajaro);
 }
 
@@ -1978,10 +1978,10 @@ function formatearTiempo(segundos) {
 function dibujarJuego() {
 
   const posicionPajaro =
-    Number(estadoJuego.pajaro ?? 20);
+    Number(estadoJuego.pajaro ?? 7.5);
 
   const posicionHormiga =
-    Number(estadoJuego.hormiga ?? 82);
+    Number(estadoJuego.hormiga ?? 92.5);
 
   const distancia =
     calcularDistancia();
@@ -2428,8 +2428,8 @@ impulsosHormigaProcesados = 0;
       ),
       {
         estado: "jugando",
-        pajaro: 20,
-        hormiga: 82,
+        pajaro: 7.5,
+        hormiga: 92.5,
         duracion: 360,
         tiempoRestante: 360,
         elementoActivo: null,
@@ -2521,8 +2521,8 @@ async function reiniciarPartida() {
       ),
       {
         estado: "preparada",
-        pajaro: 20,
-        hormiga: 82,
+        pajaro: 7.5,
+        hormiga: 92.5,
         duracion: 360,
         tiempoRestante: 360,
         elementoActivo: null,

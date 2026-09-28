@@ -2590,14 +2590,25 @@ function escucharEstadoJuego() {
     juegoRef,
     (snapshot) => {
 
-      if (snapshot.exists()) {
+if (snapshot.exists()) {
 
-        estadoJuego = {
-          ...estadoJuego,
-          ...snapshot.val()
-        };
+  const datosFirebase =
+    snapshot.val() || {};
 
-      }
+  estadoJuego = {
+    estado: "preparada",
+    pajaro: 7.5,
+    hormiga: 92.5,
+    duracion: 360,
+    tiempoRestante: 360,
+    elementoActivo: null,
+    elementoInicio: null,
+    elementoFin: null,
+    elementoDuracion: 0,
+    ...datosFirebase
+  };
+
+}
 
       dibujarJuego();
       mostrarElementoVisual(

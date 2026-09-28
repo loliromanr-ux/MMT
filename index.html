@@ -52,7 +52,7 @@
     }
 
     .aplicacion {
-      width: min(100%, 760px);
+      width: min(100%, 1100px);
     }
 
     .panel {
@@ -294,169 +294,131 @@
       line-height: 1.45;
       color: #66788a;
     }
-/* PANTALLA DE*OPERACIONES */
 
-    .panel-operaci*n {
-      width: min(100%, 520px);*      padding: 30px;
-      border-*adius: 28px;
-      background: rgb*(255, 255, 255, 0.97);
-      box-s*adow: 0 20px 55px rgba(36, 52, 71,*0.18);
+    /* PANTALLA DE OPERACIONES */
+
+    .panel-operacion {
+      width: min(100%, 520px);
+      padding: 30px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.97);
+      box-shadow: 0 20px 55px rgba(36, 52, 71, 0.18);
       text-align: center;
- *  }
+    }
 
     .cabecera-operacion {
-   *  display: flex;
-      align-items* center;
-      justify-content: sp*ce-between;
-      gap: 15px;
-     *margin-bottom: 22px;
-    }
-
-    .e*uipo-operacion {
-      display: fl*x;
+      display: flex;
       align-items: center;
-    * gap: 9px;
-      padding: 9px 14px*
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .equipo-operacion {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 14px;
       border-radius: 999px;
-     *color: white;
-      font-weight: 7*0;
-    }
-
-    .equipo-operacion.pa*aro {
-      background: var(--paja*o);
-    }
-
-    .equipo-operacion.h*rmiga {
-      background: var(--ho*miga);
-    }
-
-    .estado-operacio* {
-      padding: 8px 11px;
-      *order-radius: 999px;
-      backgro*nd: #eef3f8;
-      color: #536577;*      font-size: 13px;
-      font-*eight: 700;
-    }
-
-    .pregunta {*      margin: 25px 0;
-      paddin*: 25px 15px;
-      border-radius: *0px;
-      background: #f1f5f9;
-  *   font-size: clamp(37px, 10vw, 57*x);
+      color: white;
       font-weight: 700;
-      *etter-spacing: 2px;
     }
 
-    .re*puestas {
-      display: grid;
-   *  grid-template-columns: 1fr 1fr;
-*     gap: 13px;
+    .equipo-operacion.pajaro { background: var(--pajaro); }
+    .equipo-operacion.hormiga { background: var(--hormiga); }
+
+    .estado-operacion {
+      padding: 8px 11px;
+      border-radius: 999px;
+      background: #eef3f8;
+      color: #536577;
+      font-size: 13px;
+      font-weight: 700;
     }
-
-    .boton-*espuesta {
-      min-height: 72px;*      padding: 15px;
-      border:*3px solid transparent;
-      borde*-radius: 16px;
-      background: #*df2f7;
-      color: var(--texto);
-*     font-size: 25px;
-      font-w*ight: 700;
-      cursor: pointer;
-*   }
-
-    .boton-respuesta:hover {*      border-color: var(--azul);
- *    transform: translateY(-2px);
- *  }
-
-    .boton-respuesta.correcta*{
-      border-color: #249158;
-   *  background: #dff7e8;
-      color* #176b36;
-    }
-
-    .boton-respue*ta.incorrecta {
-      border-color* #d34a4a;
-      background: #ffe7e*;
-      color: #962525;
-    }
-
-   *.resultado-operacion {
-      min-h*ight: 58px;
-      margin-top: 19px*
-      padding: 14px;
-      border*radius: 14px;
-      background: #e*f3f8;
-      line-height: 1.45;
-   *}
-
-    .estadisticas-personales {
-*     display: flex;
-      justify-*ontent: center;
-      gap: 30px;
- *    margin-top: 18px;
-      color:*#66788a;
-      font-size: 14px;
-  * }
-
-    .estadisticas-personales s*rong {
-      display: block;
-     *color: var(--texto);
-      font-si*e: 21px;
-    }
-      /* OPERACIONES ARITMETICAS */
 
     #textoPregunta {
-      marg*n: 22px 0;
+      margin: 22px 0;
       padding: 24px;
-  *   border-radius: 18px;
-      back*round: #eef3f8;
-      font-size: 4*px;
+      border-radius: 18px;
+      background: #eef3f8;
+      font-size: 48px;
       font-weight: 700;
-      *ext-align: center;
+      text-align: center;
     }
 
-    #res*uestasOperacion {
-      display: g*id;
-      grid-template-columns: 1*r 1fr;
+    #respuestasOperacion {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
 
-   *.boton-respuesta {
-      min-heigh*: 70px;
+    .boton-respuesta {
+      min-height: 70px;
       padding: 14px;
-     *border: 3px solid transparent;
-   *  border-radius: 15px;
-      backg*ound: #edf2f7;
-      color: var(--*exto);
+      border: 3px solid transparent;
+      border-radius: 15px;
+      background: #edf2f7;
+      color: var(--texto);
       font-size: 24px;
-    * font-weight: 700;
-      cursor: p*inter;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s, background 0.15s;
     }
 
-    .boton-respuesta*hover {
-      border-color: var(--*zul);
+    .boton-respuesta:hover {
+      border-color: var(--azul);
+      transform: translateY(-2px);
     }
 
-    .boton-respuesta.*orrecta {
-      border-color: #249*58;
+    .boton-respuesta:disabled {
+      cursor: default;
+      opacity: 0.75;
+      transform: none;
+    }
+
+    .boton-respuesta.correcta {
+      border-color: #249158;
       background: #dff7e8;
-   *  color: #176b36;
+      color: #176b36;
     }
 
-    .boto*-respuesta.incorrecta {
-      bord*r-color: #d34a4a;
-      background* #ffe7e7;
+    .boton-respuesta.incorrecta {
+      border-color: #d34a4a;
+      background: #ffe7e7;
       color: #962525;
-  * }
+    }
 
     #resultadoOperacion {
-    * min-height: 52px;
-      margin-to*: 18px;
+      min-height: 52px;
+      margin-top: 18px;
       padding: 14px;
       border-radius: 12px;
       background: #eef3f8;
+      line-height: 1.45;
     }
-   /* ESCENARIO PRINCIPAL */
+
+    .estadisticas-personales {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 18px;
+      color: #66788a;
+      font-size: 14px;
+    }
+
+    .estadisticas-personales strong {
+      display: block;
+      color: var(--texto);
+      font-size: 21px;
+    }
+
+    .espera-inicio {
+      padding: 30px 20px;
+      border-radius: 18px;
+      background: #eef3f8;
+    }
+
+    /* ESCENARIO PRINCIPAL */
 
     .panel-juego {
       width: min(100%, 1100px);
@@ -1879,35 +1841,122 @@ async function comprobarRespuesta(boton) {
 
 }
 
-    async function activarElemento(tipo, duracionSegundos) {
+async function activarElemento(
+  tipo,
+  duracionSegundos
+) {
 
-  // Código de activación sincronizada
+  if (!esPantallaPrincipal) {
+    return;
+  }
+
+  if (estadoJuego.estado !== "jugando") {
+    return;
+  }
+
+  if (temporizadorElemento !== null) {
+
+    clearTimeout(temporizadorElemento);
+    temporizadorElemento = null;
+
+  }
+
+  try {
+
+    const finalizacion =
+      Date.now() + duracionSegundos * 1000;
+
+    await update(
+      ref(
+        database,
+        "salas/" +
+        CODIGO_SALA +
+        "/juego"
+      ),
+      {
+        elementoActivo: tipo,
+        elementoInicio: serverTimestamp(),
+        elementoFin: finalizacion,
+        elementoDuracion: duracionSegundos
+      }
+    );
+
+    temporizadorElemento = setTimeout(
+      () => {
+
+        cancelarElementoActivo().catch(
+          (error) => {
+            console.error(
+              "Error al cancelar elemento:",
+              error
+            );
+          }
+        );
+
+      },
+      duracionSegundos * 1000
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Error al activar elemento:",
+      error
+    );
+
+    mostrarError(error);
+
+  }
 
 }
-
 
 async function cancelarElementoActivo() {
 
-  // Código de cancelación
+  if (temporizadorElemento !== null) {
+
+    clearTimeout(temporizadorElemento);
+    temporizadorElemento = null;
+
+  }
+
+  try {
+
+    await update(
+      ref(
+        database,
+        "salas/" +
+        CODIGO_SALA +
+        "/juego"
+      ),
+      {
+        elementoActivo: null,
+        elementoInicio: null,
+        elementoFin: null,
+        elementoDuracion: 0
+      }
+    );
+
+    mostrarElementoVisual(null);
+
+  } catch (error) {
+
+    console.error(
+      "Error al cancelar el elemento:",
+      error
+    );
+
+    mostrarError(error);
+
+  }
 
 }
-``
+
     
-    function calcularDistancia() {
-
-  const posicionPajaro =
-    Number(estadoJuego.pajaro ?? 20);
-
-  const posicionHormiga =
-    Number(estadoJuego.hormiga ?? 82);
-
-  return Math.max(
-    0,
-    posicionHormiga - posicionPajaro
-  );
-
+function calcularDistancia() {
+  const posicionPajaro = Number(estadoJuego.pajaro ?? 20);
+  const posicionHormiga = Number(estadoJuego.hormiga ?? 82);
+  return Math.max(0, posicionHormiga - posicionPajaro);
 }
-
 
 function formatearTiempo(segundos) {
 
@@ -1972,27 +2021,17 @@ function dibujarJuego() {
     lineaMargen.classList.add("critico");
   }
 
-  function actualizarBotonesElementos() {
-
-  const partidaActiva =
-    estadoJuego.estado === "jugando";
-
-  botonNube.disabled =
-    !partidaActiva;
-
-  botonViento.disabled =
-    !partidaActiva;
-
-  botonRaices.disabled =
-    !partidaActiva;
-
-  botonCancelarElementos.disabled =
-    !partidaActiva ||
-    !estadoJuego.elementoActivo;
-
-}
   actualizarEstadoVisual(distancia);
 
+}
+
+
+function actualizarBotonesElementos() {
+  const partidaActiva = estadoJuego.estado === "jugando";
+  botonNube.disabled = !partidaActiva;
+  botonViento.disabled = !partidaActiva;
+  botonRaices.disabled = !partidaActiva;
+  botonCancelarElementos.disabled = !partidaActiva || !estadoJuego.elementoActivo;
 }
 
 function actualizarPantallaOperacion() {
@@ -2027,32 +2066,44 @@ function actualizarPantallaOperacion() {
         Number(estadoJuego.tiempoRestante || 0)
       );
 
-    contenidoEsperaOperacion.classList.add("oculto");
-    contenidoPregunta.classList.remove("oculto");
+    contenidoEsperaOperacion.classList.add(
+      "oculto"
+    );
+
+    contenidoPregunta.classList.remove(
+      "oculto"
+    );
+
     if (!preguntaActual) {
-  generarPregunta();
-}
+      generarPregunta();
+    }
 
   } else {
 
     mostrarPantalla("operacion");
 
-    contenidoPregunta.classList.add("oculto");
-    contenidoEsperaOperacion.classList.remove("oculto");
-    if (estadoJuego.estado === "finalizada") {
-  preguntaActual = null;
-  respuestaBloqueada = false;
-}
+    contenidoPregunta.classList.add(
+      "oculto"
+    );
+
+    contenidoEsperaOperacion.classList.remove(
+      "oculto"
+    );
 
     if (estadoJuego.estado === "pausada") {
 
       estadoOperacion.textContent =
         "Partida pausada";
 
-    } else if (estadoJuego.estado === "finalizada") {
+    } else if (
+      estadoJuego.estado === "finalizada"
+    ) {
 
       estadoOperacion.textContent =
         "Partida finalizada";
+
+      preguntaActual = null;
+      respuestaBloqueada = false;
 
     } else {
 
@@ -2200,6 +2251,16 @@ async function actualizarMovimiento() {
     !esPantallaPrincipal
   ) {
     return;
+  }
+
+  if (
+    estadoJuego.elementoActivo &&
+    estadoJuego.elementoFin &&
+    Date.now() >= Number(estadoJuego.elementoFin)
+  ) {
+
+    await cancelarElementoActivo();
+
   }
 
 let gravedadPajaro = 0.12;
@@ -2372,8 +2433,9 @@ impulsosHormigaProcesados = 0;
         duracion: 360,
         tiempoRestante: 360,
         elementoActivo: null,
-elementoInicio: null,
-elementoDuracion: 0,
+        elementoInicio: null,
+        elementoFin: null,
+        elementoDuracion: 0,
         inicio: serverTimestamp(),
         ultimaActualizacion: serverTimestamp()
       }
@@ -2464,8 +2526,9 @@ async function reiniciarPartida() {
         duracion: 360,
         tiempoRestante: 360,
         elementoActivo: null,
-elementoInicio: null,
-elementoDuracion: 0,
+        elementoInicio: null,
+        elementoFin: null,
+        elementoDuracion: 0,
         reinicio: serverTimestamp(),
         ultimaActualizacion: serverTimestamp()
       }
@@ -2816,7 +2879,7 @@ preguntaActual = null;
 respuestaBloqueada = false;
 aciertosPersonales = 0;
 intentosPersonales = 0;
- 
+ 
 contadorAciertos.textContent = "0";
 contadorIntentos.textContent = "0";
     
@@ -2904,7 +2967,8 @@ botonReiniciar.addEventListener(
 
         escucharParticipantes();
         escucharEstadoJuego();
-
+escucharImpulsos();
+        
         const equipoGuardado =
           localStorage.getItem("equipoMMT26");
 

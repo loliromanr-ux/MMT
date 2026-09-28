@@ -1321,6 +1321,33 @@
 
     </section>
 
+
+    <!-- ACCESO ADMINISTRADOR -->
+
+    <section id="modalAdmin" class="modal-admin oculto" aria-modal="true" role="dialog">
+      <div class="modal-admin-contenido">
+        <div class="logo-animales"><span>🔐</span></div>
+        <h2>Acceso de administración</h2>
+        <p>Introduce la clave para abrir los controles de la partida.</p>
+        <input
+          id="claveAdmin"
+          type="password"
+          inputmode="text"
+          autocomplete="off"
+          placeholder="Clave de administración"
+        >
+        <div class="modal-admin-botones">
+          <button id="botonValidarAdmin" class="boton-control boton-iniciar" type="button">
+            Entrar
+          </button>
+          <button id="botonCancelarAdmin" class="boton-control boton-salir" type="button">
+            Cancelar
+          </button>
+        </div>
+        <div id="mensajeClaveAdmin" class="mensaje-clave-admin"></div>
+      </div>
+    </section>
+
   </main>
 
   <script type="module">
@@ -1370,6 +1397,8 @@ import {
 const parametrosURL = new URLSearchParams(window.location.search);
 const equipoURL = parametrosURL.get("equipo");
 const modoAdmin = parametrosURL.get("admin") === "1";
+const HASH_CLAVE_ADMIN = "b9426d64ffecd5fa77de6454b28f60a872dc0794c6208b4c76032cb6ad7b07ef";
+let accesoAdminAutorizado = false;
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
@@ -1526,6 +1555,16 @@ const contadorIntentos =
 
 const botonSalirOperacion =
   document.getElementById("botonSalirOperacion");
+const modalAdmin =
+  document.getElementById("modalAdmin");
+const claveAdmin =
+  document.getElementById("claveAdmin");
+const botonValidarAdmin =
+  document.getElementById("botonValidarAdmin");
+const botonCancelarAdmin =
+  document.getElementById("botonCancelarAdmin");
+const mensajeClaveAdmin =
+  document.getElementById("mensajeClaveAdmin");
 
     let usuarioActual = null;
     let equipoActual = null;
@@ -1859,7 +1898,7 @@ async function activarElemento(
   duracionSegundos
 ) {
 
-  if (!esPantallaPrincipal) {
+  if (!esPantallaPrincipal || !accesoAdminAutorizado) {
     return;
   }
 
@@ -2407,6 +2446,10 @@ const nuevaPosicionHormiga =
 
 
 async function iniciarPartida() {
+  if (!accesoAdminAutorizado) {
+    return;
+  }
+
 
   esPantallaPrincipal = true;
   detenerIntervaloJuego();
@@ -2470,6 +2513,10 @@ impulsosHormigaProcesados = 0;
 
 
 async function pausarOReanudarPartida() {
+  if (!accesoAdminAutorizado) {
+    return;
+  }
+
 
   if (
     estadoJuego.estado !== "jugando" &&
@@ -2518,6 +2565,10 @@ async function pausarOReanudarPartida() {
 
 
 async function reiniciarPartida() {
+  if (!accesoAdminAutorizado) {
+    return;
+  }
+
 
   detenerIntervaloJuego();
   if (temporizadorElemento !== null) {
@@ -2881,15 +2932,82 @@ function mostrarPantalla(nombre) {
 
 
 
-function configurarAccesoDirecto() {
-  if (!modoAdmin) {
-    botonPantallaPrincipal.classList.add("oculto");
+async function calcularHash(texto) {
+  const datos = new TextEncoder().encode(texto);
+  const resumen = await crypto.subtle.digest("SHA-256", datos);
+  return Array.from(new Uint8Array(resumen))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function abrirModalAdmin() {
+  modalAdmin.classList.remove("oculto");
+  mensajeClaveAdmin.textContent = "";
+  claveAdmin.value = "";
+  setTimeout(() => claveAdmin.focus(), 50);
+}
+
+function cerrarModalAdmin() {
+  modalAdmin.classList.add("oculto");
+  claveAdmin.value = "";
+  mensajeClaveAdmin.textContent = "";
+}
+
+async function validarAccesoAdmin() {
+  const hashIntroducido = await calcularHash(claveAdmin.value);
+
+  if (hashIntroducido !== HASH_CLAVE_ADMIN) {
+    accesoAdminAutorizado = false;
+    mensajeClaveAdmin.textContent = "Clave incorrecta.";
+    claveAdmin.select();
+    return;
   }
 
-  if (modoAdmin) {
-    botonPantallaPrincipal.classList.remove("oculto");
-  }
+  accesoAdminAutorizado = true;
+  sessionStorage.setItem("adminMMT26", "autorizado");
+  botonPantallaPrincipal.classList.remove("oculto");
+  cerrarModalAdmin();
 }
+
+function configurarAccesoDirecto() {
+  botonPantallaPrincipal.classList.add("oculto");
+
+  if (!modoAdmin) {
+    return;
+  }
+
+  if (sessionStorage.getItem("adminMMT26") === "autorizado") {
+    accesoAdminAutorizado = true;
+    botonPantallaPrincipal.classList.remove("oculto");
+    return;
+  }
+
+  abrirModalAdmin();
+}
+
+botonValidarAdmin.addEventListener(
+  "click",
+  validarAccesoAdmin
+);
+
+botonCancelarAdmin.addEventListener(
+  "click",
+  () => {
+    cerrarModalAdmin();
+    if (modoAdmin && !accesoAdminAutorizado) {
+      window.location.href = window.location.pathname;
+    }
+  }
+);
+
+claveAdmin.addEventListener(
+  "keydown",
+  (evento) => {
+    if (evento.key === "Enter") {
+      validarAccesoAdmin();
+    }
+  }
+);
 
     botonPajaro.addEventListener(
       "click",
@@ -2925,7 +3043,8 @@ contadorIntentos.textContent = "0";
 botonPantallaPrincipal.addEventListener(
   "click",
   () => {
-    if (!modoAdmin) {
+    if (!modoAdmin || !accesoAdminAutorizado) {
+      abrirModalAdmin();
       return;
     }
     esPantallaPrincipal = true;
@@ -2985,7 +3104,11 @@ botonTormenta.addEventListener(
 
 botonCancelarElementos.addEventListener(
   "click",
-  cancelarElementoActivo
+  () => {
+    if (accesoAdminAutorizado) {
+      cancelarElementoActivo();
+    }
+  }
 );
     
 botonReiniciar.addEventListener(

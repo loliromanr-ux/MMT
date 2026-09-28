@@ -365,28 +365,10 @@
       transition: transform 0.15s, border-color 0.15s, background 0.15s;
     }
 
-    .boton-respuesta:hover {
-      border-color: var(--azul);
-      transform: translateY(-2px);
-    }
-
-    .boton-respuesta:disabled {
-      cursor: default;
-      opacity: 0.75;
-      transform: none;
-    }
-
-    .boton-respuesta.correcta {
-      border-color: #249158;
-      background: #dff7e8;
-      color: #176b36;
-    }
-
-    .boton-respuesta.incorrecta {
-      border-color: #d34a4a;
-      background: #ffe7e7;
-      color: #962525;
-    }
+    .boton-respuesta:hover { border-color: var(--azul); transform: translateY(-2px); }
+    .boton-respuesta:disabled { cursor: default; opacity: 0.75; transform: none; }
+    .boton-respuesta.correcta { border-color: #249158; background: #dff7e8; color: #176b36; }
+    .boton-respuesta.incorrecta { border-color: #d34a4a; background: #ffe7e7; color: #962525; }
 
     #resultadoOperacion {
       min-height: 52px;
@@ -406,17 +388,8 @@
       font-size: 14px;
     }
 
-    .estadisticas-personales strong {
-      display: block;
-      color: var(--texto);
-      font-size: 21px;
-    }
-
-    .espera-inicio {
-      padding: 30px 20px;
-      border-radius: 18px;
-      background: #eef3f8;
-    }
+    .estadisticas-personales strong { display: block; color: var(--texto); font-size: 21px; }
+    .espera-inicio { padding: 30px 20px; border-radius: 18px; background: #eef3f8; }
 
     /* ESCENARIO PRINCIPAL */
 
@@ -564,11 +537,11 @@
     }
 
     #personajePajaro {
-      top: 7.5%;
+      top: 20%;
     }
 
     #personajeHormiga {
-      top: 92.5%;
+      top: 82%;
     }
 
     .etiqueta-personaje {
@@ -723,6 +696,15 @@
       font-size: 75px;
       animation: moverRaices 1.2s ease-in-out infinite;
     }
+    .evento-tormenta {
+      top: 11%;
+      left: 50%;
+      width: 88%;
+      transform: translateX(-50%);
+      font-size: 68px;
+      text-align: center;
+      animation: moverTormenta 0.8s ease-in-out infinite;
+    }
 
     @keyframes moverNube {
 
@@ -770,6 +752,12 @@
         transform: translateY(0);
       }
 
+    }
+
+    @keyframes moverTormenta {
+      0% { opacity: 0.75; transform: translateX(-50%) translateY(0); }
+      50% { opacity: 1; transform: translateX(-50%) translateY(10px); }
+      100% { opacity: 0.75; transform: translateX(-50%) translateY(0); }
     }
 
     .panel-elementos {
@@ -1141,7 +1129,7 @@
           <span>Distancia actual</span>
 
           <strong id="distanciaActual">
-            62 %
+            85 %
           </strong>
         </div>
 
@@ -1166,6 +1154,10 @@
 
 <div id="eventoRaices" class="evento-visual evento-raices oculto">
   🌳
+</div>
+<div id="eventoTormenta" class="evento-visual evento-tormenta oculto">
+  🌧️ ⚡ 🌧️<br>
+  🌳 🌱 🌳
 </div>
         
         <div class="hierba">
@@ -1293,6 +1285,13 @@
     type="button"
   >
     🌳 Raíces
+  </button>
+  <button
+    id="botonTormenta"
+    class="boton-elemento"
+    type="button"
+  >
+    ⛈️ Tormenta
   </button>
 
   <button
@@ -1468,6 +1467,8 @@ const eventoViento =
 
 const eventoRaices =
   document.getElementById("eventoRaices");
+const eventoTormenta =
+  document.getElementById("eventoTormenta");
 
 const botonNube =
   document.getElementById("botonNube");
@@ -1477,6 +1478,8 @@ const botonViento =
 
 const botonRaices =
   document.getElementById("botonRaices");
+const botonTormenta =
+  document.getElementById("botonTormenta");
 
 const botonCancelarElementos =
   document.getElementById(
@@ -1813,10 +1816,12 @@ async function comprobarRespuesta(boton) {
   eventoNube.classList.add("oculto");
   eventoViento.classList.add("oculto");
   eventoRaices.classList.add("oculto");
+  eventoTormenta.classList.add("oculto");
 
   botonNube.classList.remove("activo");
   botonViento.classList.remove("activo");
   botonRaices.classList.remove("activo");
+  botonTormenta.classList.remove("activo");
 
   if (tipo === "nube") {
 
@@ -1837,6 +1842,10 @@ async function comprobarRespuesta(boton) {
     eventoRaices.classList.remove("oculto");
     botonRaices.classList.add("activo");
 
+  }
+  if (tipo === "tormenta") {
+    eventoTormenta.classList.remove("oculto");
+    botonTormenta.classList.add("activo");
   }
 
 }
@@ -2025,12 +2034,12 @@ function dibujarJuego() {
 
 }
 
-
 function actualizarBotonesElementos() {
   const partidaActiva = estadoJuego.estado === "jugando";
   botonNube.disabled = !partidaActiva;
   botonViento.disabled = !partidaActiva;
   botonRaices.disabled = !partidaActiva;
+  botonTormenta.disabled = !partidaActiva;
   botonCancelarElementos.disabled = !partidaActiva || !estadoJuego.elementoActivo;
 }
 
@@ -2285,6 +2294,10 @@ if (elementoActivo === "raices") {
 
   subidaHormiga += 0.14;
 
+}
+if (elementoActivo === "tormenta") {
+  gravedadPajaro += 0.22;
+  subidaHormiga += 0.18;
 }
 
   const nuevosImpulsosPajaro =
@@ -2590,32 +2603,27 @@ function escucharEstadoJuego() {
     juegoRef,
     (snapshot) => {
 
-if (snapshot.exists()) {
-
-  const datosFirebase =
-    snapshot.val() || {};
-
-  estadoJuego = {
-    estado: "preparada",
-    pajaro: 7.5,
-    hormiga: 92.5,
-    duracion: 360,
-    tiempoRestante: 360,
-    elementoActivo: null,
-    elementoInicio: null,
-    elementoFin: null,
-    elementoDuracion: 0,
-    ...datosFirebase
-  };
-
-}
+      if (snapshot.exists()) {
+        const datosFirebase = snapshot.val() || {};
+        estadoJuego = {
+          estado: "preparada",
+          pajaro: 7.5,
+          hormiga: 92.5,
+          duracion: 360,
+          tiempoRestante: 360,
+          elementoActivo: null,
+          elementoInicio: null,
+          elementoFin: null,
+          elementoDuracion: 0,
+          ...datosFirebase
+        };
+      }
 
       dibujarJuego();
-      mostrarElementoVisual(
-  estadoJuego.elementoActivo || null
-);
-      
       actualizarPantallaOperacion();
+      mostrarElementoVisual(
+        estadoJuego.elementoActivo || null
+      );
 
       if (
         estadoJuego.estado === "finalizada"
@@ -2952,6 +2960,11 @@ botonViento.addEventListener(
 botonRaices.addEventListener(
   "click",
   () => activarElemento("raices", 12)
+);
+
+botonTormenta.addEventListener(
+  "click",
+  () => activarElemento("tormenta", 10)
 );
 
 botonCancelarElementos.addEventListener(
